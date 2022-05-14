@@ -3,7 +3,9 @@ package com.example.geeta_dresses;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +19,28 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.geeta_dresses.constants.Constant;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class inquiryAdapter extends RecyclerView.Adapter<inquiryAdapter.Viewfinder> {
 
     private Context context;
+    RequestQueue requestQueue;
+    JsonObjectRequest jsonObjectRequest;
+    JSONObject data;
+    Constant constant;
+    SharedPreferences userSP;
+
     ArrayList<inquiryModel> inquiryModelArrayList;
 
 
@@ -101,6 +120,33 @@ public class inquiryAdapter extends RecyclerView.Adapter<inquiryAdapter.Viewfind
                 builder.setPositiveButton("Approve", (dialog, which) -> {
                     Boolean isPrivillaged = inquiryModelArrayList.get(getAdapterPosition()).getManger();
                     if(isPrivillaged){
+                        requestQueue = Volley.newRequestQueue(context);
+                        constant = new Constant();
+
+                        // URL
+                        userSP = context.getSharedPreferences("userMetadata", context.MODE_PRIVATE);
+                        String url = constant.getURL() + constant.getPORT() + constant.getGET_TOKEN_DETAILS() + userSP.getString("tokenNumber", "");
+
+                        data = new JSONObject();
+                        try {
+                            data.put("isApproved",true);
+                            data.put("approvedBy",userSP.getString("userName",""));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, data, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Log.d("Onkar See Here",response.toString());
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d("Onkar See Here Error",error.toString());
+                            }
+                        });
+
                         Toast.makeText(context,"Manager", Toast.LENGTH_SHORT).show();
                     }else {
                         Toast.makeText(context, "Not Manager", Toast.LENGTH_SHORT).show();
@@ -130,4 +176,6 @@ public class inquiryAdapter extends RecyclerView.Adapter<inquiryAdapter.Viewfind
 
         }
     }
+
+
 }
