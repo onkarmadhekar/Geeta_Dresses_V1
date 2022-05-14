@@ -1,12 +1,8 @@
 package com.example.geeta_dresses;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,16 +11,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.geeta_dresses.constants.Constant;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 
 public class ProductFinder extends AppCompatActivity {
     EditText productId, productName, productPrice;
@@ -32,10 +23,7 @@ public class ProductFinder extends AppCompatActivity {
     SharedPreferences userSP;
     Button nextBTN, backBTN;
     RequestQueue requestQueue;
-    JsonObjectRequest jsonObjectRequest;
-    JSONObject object;
-    Constant constant;
-    String product_name = "", product_price = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,30 +51,24 @@ public class ProductFinder extends AppCompatActivity {
 
 
         //backBTN code
-        backBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-                onBackPressed();
-            }
+        backBTN.setOnClickListener(view -> {
+            finish();
+            onBackPressed();
         });
         //nextBTN code
-        nextBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ProductFinder.this, tokenDashboard.class);
+        nextBTN.setOnClickListener(view -> {
+            Intent intent = new Intent(ProductFinder.this, tokenDashboard.class);
 
-                if (!productName.getText().toString().isEmpty() && !productPrice.getText().toString().isEmpty() && !productId.getText().toString().isEmpty()) {
-                    intent.putExtra("activity", "ProductFinder");
-                    intent.putExtra("result", "OK");
-                    intent.putExtra("product_name", productName.getText().toString());
-                    intent.putExtra("productId", productId.getText().toString());
-                    intent.putExtra("productPrice", productPrice.getText().toString());
-                    startActivity(intent);
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "Please input all the above boxes", Toast.LENGTH_SHORT).show();
-                }
+            if (!productName.getText().toString().isEmpty() && !productPrice.getText().toString().isEmpty() && !productId.getText().toString().isEmpty()) {
+                intent.putExtra("activity", "ProductFinder");
+                intent.putExtra("result", "OK");
+                intent.putExtra("product_name", productName.getText().toString());
+                intent.putExtra("productId", productId.getText().toString());
+                intent.putExtra("productPrice", productPrice.getText().toString());
+                startActivity(intent);
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Please input all the above boxes", Toast.LENGTH_SHORT).show();
             }
         });
     }

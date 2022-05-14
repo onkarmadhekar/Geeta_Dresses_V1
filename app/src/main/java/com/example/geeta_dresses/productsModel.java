@@ -9,8 +9,6 @@ public class productsModel implements Serializable {
     private String product_prize;
     private String product_id;
 
-
-
     // Constructor
     public productsModel(String product_name, String product_qty,String product_prize,String product_id) {
         this.product_name = product_name;

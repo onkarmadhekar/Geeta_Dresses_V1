@@ -1,17 +1,15 @@
 package com.example.geeta_dresses;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 public class tokenHome extends AppCompatActivity {
     //variables
@@ -40,29 +38,19 @@ public class tokenHome extends AppCompatActivity {
         userDescription.setText(userSP.getString("userEmail", ""));
 
         //backBTN code
-        backBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-                onBackPressed();
-            }
+        backBTN.setOnClickListener(view -> {
+            finish();
+            onBackPressed();
         });
         //createTokenBTN code
-        createTokenBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent createTokenIntent = new Intent(getApplicationContext(), tokenNumberCreation.class);
-                startActivity(createTokenIntent);
-            }
+        createTokenBTN.setOnClickListener(view -> {
+            Intent createTokenIntent = new Intent(getApplicationContext(), tokenNumberCreation.class);
+            startActivity(createTokenIntent);
         });
-        //existinTokenBTN code
-        existingBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent exisitingTokenIntent = new Intent(getApplicationContext(), ExistingToken.class);
-                startActivity(exisitingTokenIntent);
-                //Toast.makeText(getApplicationContext(), "Clicked on Existing Token", Toast.LENGTH_SHORT).show();
-            }
+        //existingTokenBTN code
+        existingBTN.setOnClickListener(view -> {
+            Intent existingTokenIntent = new Intent(getApplicationContext(), ExistingToken.class);
+            startActivity(existingTokenIntent);
         });
     }
 }

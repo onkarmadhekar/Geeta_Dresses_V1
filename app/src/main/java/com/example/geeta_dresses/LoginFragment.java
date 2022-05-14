@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,6 @@ import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.geeta_dresses.constants.Constant;
@@ -79,77 +76,68 @@ public class LoginFragment extends Fragment {
             startActivity(intent);
         }
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Constant object for url
-                constant = new Constant();
-                // URL
-                String url = constant.getURL()+constant.getPORT()+constant.getUSER_LOGIN();
-                //String url  = "http://  :8080/user/login/";
+        loginBtn.setOnClickListener(view1 -> {
+            // Constant object for url
+            constant = new Constant();
+            // URL
+            String url = constant.getURL()+constant.getPORT()+constant.getUSER_LOGIN();
+            //String url  = "http://  :8080/user/login/";
 
-                // Creating Json Object For Post Request
+            // Creating Json Object For Post Request
+            try {
+                object = new JSONObject();
+                object.put("userEmail",email.getEditText().getText().toString().trim());
+                object.put("userPassword",password.getEditText().getText().toString().trim());
+            }
+            catch (JSONException e){
+                Toast.makeText(requireContext(),"Fill all details!",Toast.LENGTH_SHORT).show();
+            }
+
+            // Creating a request
+            jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, object, response -> {
+                //Log.d("VolleyResponse",response.toString());
                 try {
-                    object = new JSONObject();
-                    object.put("userEmail",email.getEditText().getText().toString().trim());
-                    object.put("userPassword",password.getEditText().getText().toString().trim());
-                }
-                catch (JSONException e){
-                    Toast.makeText(requireContext(),"Fill all details!",Toast.LENGTH_SHORT).show();
-                }
+                    boolean result = response.getString("status").equals("OK");
+                    if(result){
+                        // Storing Token Into Shared Preference
+                        tokenSp = requireContext().getSharedPreferences("tokenSharedPreferences",Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = tokenSp.edit();
+                        editor.putString("token",response.getString("token"));
+                        editor.apply();
 
-                // Creating a request
-                jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, object, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        //Log.d("VolleyResponse",response.toString());
-                        try {
-                            Boolean result = response.getString("status").equals("OK");
-                            if(result){
-                                // Storing Token Into Shared Preference
-                                tokenSp = requireContext().getSharedPreferences("tokenSharedPreferences",Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = tokenSp.edit();
-                                editor.putString("token",response.getString("token"));
-                                editor.apply();
-
-                                // Saving User Data In Shared Preferences
-                                JSONArray dataArray = response.getJSONArray("data");
-                                JSONObject data = (JSONObject) dataArray.get(0);
-                                userSP = requireContext().getSharedPreferences("userMetadata",Context.MODE_PRIVATE);
-                                SharedPreferences.Editor userEditor = userSP.edit();
-                                userEditor.putString("userName", data.getString("userName"));
-                                userEditor.putString("userEmail", data.getString("userEmail"));
-                                userEditor.putString("userId",data.getString("id"));
-                                userEditor.putString("userType",data.getString("userType"));
-                                userEditor.putString("userRole",data.getString("userRole"));
-                                userEditor.apply();
+                        // Saving User Data In Shared Preferences
+                        JSONArray dataArray = response.getJSONArray("data");
+                        JSONObject data = (JSONObject) dataArray.get(0);
+                        userSP = requireContext().getSharedPreferences("userMetadata",Context.MODE_PRIVATE);
+                        SharedPreferences.Editor userEditor = userSP.edit();
+                        userEditor.putString("userName", data.getString("userName"));
+                        userEditor.putString("userEmail", data.getString("userEmail"));
+                        userEditor.putString("userId",data.getString("id"));
+                        userEditor.putString("userType",data.getString("userType"));
+                        userEditor.putString("userRole",data.getString("userRole"));
+                        userEditor.apply();
 //                                Log.d("User Name",data.getString("userName"));
 //                                Log.d("User Email",data.getString("userEmail"));
 
-                                // Saving Login Session
-                                loginSp.edit().putBoolean("isLogged", true).apply();
+                        // Saving Login Session
+                        loginSp.edit().putBoolean("isLogged", true).apply();
 
-                                // Success Message and Redirecting
-                                Toast.makeText(getContext(),"Login Successful",Toast.LENGTH_LONG).show();
-                                startActivity(new Intent(getActivity(),Dashboard.class));
-                            }
-                            else{
-                                Toast.makeText(getContext(),"Login Unsuccessful",Toast.LENGTH_LONG).show();
-                            }
-                        } catch (JSONException e) {
-                            Toast.makeText(getContext(),"Login Unsuccessful",Toast.LENGTH_LONG).show();
-                        }
+                        // Success Message and Redirecting
+                        Toast.makeText(getContext(),"Login Successful",Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(getActivity(),Dashboard.class));
+                    }
+                    else{
+                        Toast.makeText(getContext(),"Login Unsuccessful",Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(getContext(),"Login Unsuccessful",Toast.LENGTH_LONG).show();
+                }
 
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(requireContext(),"Something Went Wrong",Toast.LENGTH_LONG).show();
-                        error.printStackTrace();
-                    }
-                });
-                requestQueue.add(jsonObjectRequest);
-            }
+            }, error -> {
+                Toast.makeText(requireContext(),"Something Went Wrong",Toast.LENGTH_LONG).show();
+                //error.printStackTrace();
+            });
+            requestQueue.add(jsonObjectRequest);
         });
         return view;
     }
