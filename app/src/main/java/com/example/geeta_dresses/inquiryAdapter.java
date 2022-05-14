@@ -126,7 +126,6 @@ public class inquiryAdapter extends RecyclerView.Adapter<inquiryAdapter.Viewfind
                         // URL
                         userSP = context.getSharedPreferences("userMetadata", context.MODE_PRIVATE);
                         String url = constant.getURL() + constant.getPORT() + constant.getGET_TOKEN_DETAILS() + inquiryModelArrayList.get(getAdapterPosition()).getInquiry_no();
-                        Log.d("URL here",url);
                         data = new JSONObject();
                         try {
                             data.put("isApproved",true);
@@ -134,7 +133,7 @@ public class inquiryAdapter extends RecyclerView.Adapter<inquiryAdapter.Viewfind
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
+                        Log.d("URL here", String.valueOf(data));
                         jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, data, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
@@ -147,6 +146,7 @@ public class inquiryAdapter extends RecyclerView.Adapter<inquiryAdapter.Viewfind
                                 Log.d("Onkar See Here Error",error.toString());
                             }
                         });
+                        requestQueue.add(jsonObjectRequest);
 
 
                     }else {
