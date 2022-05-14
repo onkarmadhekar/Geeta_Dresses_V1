@@ -120,10 +120,10 @@ public class tokenDashboard extends AppCompatActivity {
                 reasonETV.setText(data.getString("reason"));
                 dateBTN.setText(data.getString("day"));
 
-                if(data.getBoolean("isEnquired")== true){
+                if(data.getBoolean("isEnquired")){
                     inquiredSW.setTextOn("ON");
                 }
-                if(data.getBoolean("isPurchased")== true){
+                if(data.getBoolean("isPurchased")){
                     purchasedSW.setTextOn("ON");
                 }
 

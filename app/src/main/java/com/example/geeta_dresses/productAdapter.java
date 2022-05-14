@@ -92,14 +92,6 @@ public class productAdapter extends RecyclerView.Adapter<productAdapter.Viewfind
                     Toast.makeText(context, "delete", Toast.LENGTH_LONG).show();
                 }
             });
-//            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View view) {
-//                    productModelArrayList.remove(getAdapterPosition());
-//                    notifyItemRemoved(getAdapterPosition());
-//                    return true;
-//                }
-//            });
         }
     }
 }

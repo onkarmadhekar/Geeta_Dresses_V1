@@ -125,8 +125,8 @@ public class inquiryAdapter extends RecyclerView.Adapter<inquiryAdapter.Viewfind
 
                         // URL
                         userSP = context.getSharedPreferences("userMetadata", context.MODE_PRIVATE);
-                        String url = constant.getURL() + constant.getPORT() + constant.getGET_TOKEN_DETAILS() + userSP.getString("tokenNumber", "");
-
+                        String url = constant.getURL() + constant.getPORT() + constant.getGET_TOKEN_DETAILS() + inquiryModelArrayList.get(getAdapterPosition()).getInquiry_no();
+                        Log.d("URL here",url);
                         data = new JSONObject();
                         try {
                             data.put("isApproved",true);
@@ -139,6 +139,7 @@ public class inquiryAdapter extends RecyclerView.Adapter<inquiryAdapter.Viewfind
                             @Override
                             public void onResponse(JSONObject response) {
                                 Log.d("Onkar See Here",response.toString());
+                                Toast.makeText(context,"Manager", Toast.LENGTH_SHORT).show();
                             }
                         }, new Response.ErrorListener() {
                             @Override
@@ -147,7 +148,7 @@ public class inquiryAdapter extends RecyclerView.Adapter<inquiryAdapter.Viewfind
                             }
                         });
 
-                        Toast.makeText(context,"Manager", Toast.LENGTH_SHORT).show();
+
                     }else {
                         Toast.makeText(context, "Not Manager", Toast.LENGTH_SHORT).show();
                     }
