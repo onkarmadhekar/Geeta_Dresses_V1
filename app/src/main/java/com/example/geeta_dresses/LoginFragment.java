@@ -45,11 +45,13 @@ public class LoginFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
+        // Fetching widgets with the help of ID
         email = view.findViewById(R.id.login_email);
         password = view.findViewById(R.id.password);
         forgetPassword = view.findViewById(R.id.forget_btn);
         loginBtn = view.findViewById(R.id.login_btn);
 
+        // Animations
         email.setTranslationX(800);
         password.setTranslationX(800);
         forgetPassword.setTranslationX(800);
@@ -65,8 +67,11 @@ public class LoginFragment extends Fragment {
         forgetPassword.animate().translationX(0).alpha(1).setDuration(800).setStartDelay(500).start();
         loginBtn.animate().translationX(0).alpha(1).setDuration(800).setStartDelay(700).start();
 
+
         // RequestQueue For Handle Network Request
         requestQueue = Volley.newRequestQueue(requireContext());
+
+        // For checking if the user session is already active(logged in)
         loginSp = requireContext().getSharedPreferences("login",Context.MODE_PRIVATE);
 
         if(loginSp.getBoolean("isLogged",false)){
@@ -77,6 +82,7 @@ public class LoginFragment extends Fragment {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Constant object for url
                 constant = new Constant();
                 // URL
                 String url = constant.getURL()+constant.getPORT()+constant.getUSER_LOGIN();
@@ -89,19 +95,17 @@ public class LoginFragment extends Fragment {
                     object.put("userPassword",password.getEditText().getText().toString().trim());
                 }
                 catch (JSONException e){
-                    e.printStackTrace();
+                    Toast.makeText(requireContext(),"Fill all details!",Toast.LENGTH_SHORT).show();
                 }
 
                 // Creating a request
                 jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, object, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("VolleyResponse",response.toString());
-
+                        //Log.d("VolleyResponse",response.toString());
                         try {
                             Boolean result = response.getString("status").equals("OK");
                             if(result){
-
                                 // Storing Token Into Shared Preference
                                 tokenSp = requireContext().getSharedPreferences("tokenSharedPreferences",Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = tokenSp.edit();
@@ -119,8 +123,8 @@ public class LoginFragment extends Fragment {
                                 userEditor.putString("userType",data.getString("userType"));
                                 userEditor.putString("userRole",data.getString("userRole"));
                                 userEditor.apply();
-                                Log.d("User Name",data.getString("userName"));
-                                Log.d("User Email",data.getString("userEmail"));
+//                                Log.d("User Name",data.getString("userName"));
+//                                Log.d("User Email",data.getString("userEmail"));
 
                                 // Saving Login Session
                                 loginSp.edit().putBoolean("isLogged", true).apply();
@@ -133,7 +137,7 @@ public class LoginFragment extends Fragment {
                                 Toast.makeText(getContext(),"Login Unsuccessful",Toast.LENGTH_LONG).show();
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            Toast.makeText(getContext(),"Login Unsuccessful",Toast.LENGTH_LONG).show();
                         }
 
                     }
