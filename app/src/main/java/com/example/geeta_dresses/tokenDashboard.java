@@ -140,7 +140,7 @@ public class tokenDashboard extends AppCompatActivity {
 
                 }
             } catch (JSONException e) {
-                Toast.makeText(tokenDashboard.this,"Failed to get token details!",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(tokenDashboard.this,"Failed to get token details!",Toast.LENGTH_SHORT).show();
             }
         }, error -> Toast.makeText(tokenDashboard.this,"Something Went Wrong!",Toast.LENGTH_SHORT).show());
 
