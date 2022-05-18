@@ -1,13 +1,21 @@
 package com.example.geeta_dresses;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,12 +39,14 @@ import com.example.geeta_dresses.constants.Constant;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -56,6 +66,8 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
     TextView inquiryCount;//, addTokenTV;
     private long pressedTime;
     Boolean isAllFabsVisible;
+    DatePickerDialog picker;
+    String startDateSTR, endDateSTR;
 
     // Arraylist for storing data
     private ArrayList<inquiryModel> inquiryModelArrayList;
@@ -203,6 +215,82 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
 
         filterbtn.setOnClickListener(view -> {
             Toast.makeText(Dashboard.this,"Clicked filter!!",Toast.LENGTH_SHORT).show();
+            //defination for the dynamic dialog box
+            AlertDialog.Builder builder=new AlertDialog.Builder(view.getContext());
+            View view2= LayoutInflater.from(view.getContext()).inflate(R.layout.filter_card_dialog,null);
+            Button startDate = view2.findViewById(R.id.startDate);
+            Button endDate = view2.findViewById(R.id.endDate);
+            builder.setView(view2);
+
+            startDate.setOnClickListener(view1 ->{
+                final Calendar cldr = Calendar.getInstance();
+                int day = cldr.get(Calendar.DAY_OF_MONTH);
+                int month = cldr.get(Calendar.MONTH);
+                int year = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                picker = new DatePickerDialog(Dashboard.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                startDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                String str = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                                //setOrder_date_str(str);
+                                startDateSTR = year + "/" + monthOfYear + "/" + dayOfMonth;
+
+                            }
+                        }, year, month, day);
+                picker.show();
+
+            });
+
+            endDate.setOnClickListener(view1 ->{
+                final Calendar cldr = Calendar.getInstance();
+                int day = cldr.get(Calendar.DAY_OF_MONTH);
+                int month = cldr.get(Calendar.MONTH);
+                int year = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                picker = new DatePickerDialog(Dashboard.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                endDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                String str = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                                //setOrder_date_str(str);
+                                endDateSTR = year + "/" + monthOfYear + "/" + dayOfMonth;
+
+                            }
+                        }, year, month, day);
+                picker.show();
+            });
+
+            //code for the positive button
+            builder.setPositiveButton("Set Filter", (dialog, which) -> {
+                if ((TextUtils.isEmpty(startDate.getText())) && (TextUtils.isEmpty(endDate.getText()))) {
+                    Toast.makeText(view2.getContext(),"Complete the formality", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(view2.getContext(),"Start date "+startDateSTR+"end date"+endDateSTR,Toast.LENGTH_LONG).show();
+                }
+            });
+            //code for the negative button
+            builder.setNegativeButton("back", (dialog, which) -> dialog.dismiss());
+
+            //output line for the calling
+            final AlertDialog alertDialog=builder.create();
+            alertDialog.show();
+
+            //designing for buttons
+            //positive
+            Button button_positive = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            //button_positive.setBackgroundColor(Color.GRAY);
+            button_positive.setPadding(20, 5, 20, 5);
+            button_positive.setTextColor(Color.BLACK);
+            //negative
+            Button button_negative = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+            //button_negative.setBackgroundColor(Color.GRAY);
+            button_negative.setPadding(20, 5, 20, 5);
+            button_negative.setTextColor(Color.BLACK);
+
         });
     }
 
