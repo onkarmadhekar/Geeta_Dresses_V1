@@ -8,6 +8,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -49,12 +50,16 @@ public class ExistingToken extends AppCompatActivity {
         });
         //createTokenBTN code
         attendTokenBTN.setOnClickListener(view -> {
-           String getTokenText = tokenNumber.getText().toString();
-            SharedPreferences.Editor tokenEdit = userSP.edit();
-            tokenEdit.putString("tokenNumber",getTokenText);
-            tokenEdit.apply();
-            Intent intent = new Intent(ExistingToken.this,tokenDashboard.class);
-            startActivity(intent);
+            if(tokenNumber.getText().toString().equals("")) {
+                Toast.makeText(getApplicationContext(),"Empty Field now Allowed! Please enter the Token Number.",Toast.LENGTH_LONG).show();
+            } else {
+                String getTokenText = tokenNumber.getText().toString();
+                SharedPreferences.Editor tokenEdit = userSP.edit();
+                tokenEdit.putString("tokenNumber", getTokenText);
+                tokenEdit.apply();
+                Intent intent = new Intent(ExistingToken.this, tokenDashboard.class);
+                startActivity(intent);
+            }
         });
         //existingTokenBTN code
         leaveTokenBTN.setOnClickListener(view -> {
