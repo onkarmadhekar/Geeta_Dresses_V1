@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.geeta_dresses.constants.Constant;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
@@ -48,10 +50,12 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
-    ExtendedFloatingActionButton addTokenbtn;
+    ExtendedFloatingActionButton addFab, addTokenbtn, filterbtn;
+    //FloatingActionButton addTokenbtn;
     SharedPreferences spLogin, spToken, spUserData,userSP;
-    TextView inquiryCount;
+    TextView inquiryCount;//, addTokenTV;
     private long pressedTime;
+    Boolean isAllFabsVisible;
 
     // Arraylist for storing data
     private ArrayList<inquiryModel> inquiryModelArrayList;
@@ -71,10 +75,18 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbarHere);
         addTokenbtn = findViewById(R.id.addTokenbtn);
+        addFab = findViewById(R.id.add_fab);
+        filterbtn = findViewById(R.id.filterbtn);
         inquiryCount = findViewById(R.id.textView4);
         //User data part with SP
         userSP = getSharedPreferences("userMetadata", MODE_PRIVATE);
-
+        
+        //code for the floating buttons
+        addTokenbtn.setVisibility(View.GONE);
+        filterbtn.setVisibility(View.GONE);
+        //addTokenTV.setVisibility(View.GONE);
+        isAllFabsVisible = false;
+        addFab.shrink();
         //Tool bar as action bar
         setSupportActionBar(toolbar);
 
@@ -165,12 +177,35 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         courseRV.setAdapter(inquiryAdapter);
 
         //Floating button implementation
+
+        addFab.setOnClickListener(view -> {
+            if (!isAllFabsVisible){
+                addTokenbtn.show();
+                filterbtn.show();
+                //addTokenTV.setVisibility(View.VISIBLE);
+
+                addFab.extend();
+                isAllFabsVisible = true;
+            }else{
+                addTokenbtn.hide();
+                filterbtn.hide();
+                //addTokenTV.setVisibility(View.GONE);
+
+                addFab.shrink();
+                isAllFabsVisible = false;
+            }
+        });
         addTokenbtn.setOnClickListener(view -> {
             Intent addOrderIntent = new Intent(getApplicationContext(), tokenHome.class);
             startActivity(addOrderIntent);
             //Toast.makeText(getApplicationContext(), "Clicked on add order", Toast.LENGTH_SHORT).show();
         });
+
+        filterbtn.setOnClickListener(view -> {
+            Toast.makeText(Dashboard.this,"Clicked filter!!",Toast.LENGTH_SHORT).show();
+        });
     }
+
 
     @Override
     public void onBackPressed() {

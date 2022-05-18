@@ -136,23 +136,21 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/idInquiryRV"
                 android:layout_width="match_parent"
-                android:layout_height="600dp"
+                android:layout_height="650dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="15dp"
                 android:paddingBottom="70dp"/>
         </LinearLayout>
-
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/addTokenbtn"
+            android:id="@+id/add_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
-            android:layout_margin="16dp"
-            android:layout_marginTop="372dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:backgroundTint="@color/denim_blue"
-            android:contentDescription="Add Order"
-            android:text="Add Token"
+            android:text="Actions"
             android:textColor="@color/white"
             app:icon="@drawable/ic_plus_24px"
             app:iconTint="@color/white"
@@ -163,11 +161,54 @@
             app:layout_constraintTop_toBottomOf="@+id/imageView4"
             app:layout_constraintVertical_bias="1.0"
             tools:ignore="MissingConstraints" />
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/addTokenbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/denim_blue"
+            android:contentDescription="Add Token"
+            android:gravity="center"
+            android:text="Add Token"
+            android:textColor="@color/white"
+            app:icon="@drawable/ic_token"
+            app:iconTint="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/add_fab"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView4"
+            app:layout_constraintVertical_bias="1.0"
+            tools:ignore="MissingConstraints" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/filterbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/denim_blue"
+            android:contentDescription="Filter"
+            android:text="Filter"
+            android:textColor="@color/white"
+            app:iconTint="@color/white"
+            app:icon="@drawable/ic_filter"
+            android:gravity="center"
+            app:layout_constraintBottom_toTopOf="@+id/addTokenbtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView4"
+            app:layout_constraintVertical_bias="1.0"
+            tools:ignore="MissingConstraints" />
+
+
 
         <LinearLayout
             android:id="@+id/constraint_layout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/dash_bg"
             android:elevation="3dp"
             android:orientation="vertical"
@@ -182,21 +223,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
                 android:layout_marginTop="30dp"
+                android:layout_marginBottom="20dp"
                 android:fontFamily="@font/lexend_exa"
                 android:text="Total -"
                 android:textColor="#FFFCFC"
                 android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/lexend_exa"
-                android:text=""
-                android:textColor="#FFFCFC"
-                android:textSize="20sp" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
