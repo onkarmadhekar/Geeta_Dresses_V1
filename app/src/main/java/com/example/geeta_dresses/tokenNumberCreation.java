@@ -60,11 +60,11 @@ public class tokenNumberCreation extends AppCompatActivity {
         });
         //createTokenBTN code
         attendTokenBTN.setOnClickListener(view -> {
-            String getTokenText = tokenNumber.getText().toString();
-            String userNameText = userName.getText().toString();
-            updateToken(getTokenText,userNameText);
-            Intent intent = new Intent(tokenNumberCreation.this,tokenDashboard.class);
-            startActivity(intent);
+                String getTokenText = tokenNumber.getText().toString();
+                String userNameText = userName.getText().toString();
+                updateToken(getTokenText,userNameText);
+                Intent intent = new Intent(tokenNumberCreation.this,tokenDashboard.class);
+                startActivity(intent);
         });
 
         //existingTokenBTN code
