@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="15dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="Get the Inquires with date filter"
+        android:textSize="18sp"
+        android:fontFamily="@font/lexend_exa"
+        android:textColor="@color/black"
+        android:textStyle="bold"/>
+    <Button
+        android:id="@+id/startDate"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_margin="15dp"
+        android:text="Start Date"
+        android:textColor="@color/denim_blue"
+        android:textSize="15dp" />
+
+    <Button
+        android:id="@+id/endDate"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="End Date"
+        android:layout_gravity="center"
+        android:layout_margin="15dp"
+        android:textColor="@color/denim_blue"
+        android:textSize="15dp" />
+
+</LinearLayout>
