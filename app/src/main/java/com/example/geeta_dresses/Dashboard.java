@@ -47,16 +47,18 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 
 public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     //variable
     private RecyclerView courseRV;
-    Constant constant;
-    JsonObjectRequest jsonObjectRequest;
-    JSONObject object;
-    RequestQueue requestQueue;
-    JSONObject response_object;
+    Constant constant,constant_1;
+    JsonObjectRequest jsonObjectRequest,jsonObjectRequest_1;
+    JSONObject object,object_1;
+    RequestQueue requestQueue, requestQueue_1;
+    JSONObject response_object,response_object_1;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
@@ -176,7 +178,6 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         });
 
         requestQueue.add(jsonObjectRequest);
-
         // we are initializing our adapter class and passing our arraylist to it.
         inquiryAdapter inquiryAdapter = new inquiryAdapter(this, inquiryModelArrayList);
 
@@ -269,6 +270,63 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                     Toast.makeText(view2.getContext(),"Complete the formality", Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    // Onkar Write Code Here
+                    constant_1 = new Constant();
+                    requestQueue_1 = Volley.newRequestQueue(this);
+
+                    String url1 = constant_1.getURL() + constant_1.getPORT() + constant_1.getUPDATE_TOKEN() + "getByDate?from=" + startDateSTR +"&to=" + endDateSTR;
+                    object_1 = new JSONObject();
+
+                    jsonObjectRequest_1 = new JsonObjectRequest(Request.Method.GET, url1, object_1, response -> {
+
+                        try {
+                            inquiryModelArrayList.clear();
+                            response_object = response;
+                            JSONArray data_array = response.getJSONArray("data");
+
+                            inquiryCount.setText("Total inquiries - " + data_array.length());
+                            for(int i = 0; i < data_array.length(); i++)
+                            {
+                                //JSONObject product = product_array.getJSONObject(i);
+                                JSONObject data = (JSONObject) data_array.get(i);
+                                String inquiryNo = data.getString("tokenNumber");
+                                String inquiryUser = data.getString("username");
+                                String rawDay = data.getString("createdAt");
+                                String inquiryDay = rawDay.substring(0,10);
+
+                                String[] mobileArray = {};//= {"Android","IPhone","WindowsMobile","Blackberry",
+//                                "WebOS","Ubuntu","Windows7","Max OS X"};
+                                ArrayList<String> productArray = new ArrayList<String>();
+                                JSONArray product_array = data.getJSONArray("product");
+                                Log.d("Product_array_dialog",String.valueOf(product_array));
+                                for(int j=0;j< product_array.length();j++){
+                                    JSONObject product = product_array.getJSONObject(j);
+                                    String product_name = product.getString("productName");
+                                    String qty = product.getString("quantity");
+                                    productArray.add(product_name +"                 "+ qty);
+                                }
+                                mobileArray = productArray.toArray(mobileArray);
+                                Boolean isInquired = data.getBoolean("isEnquired");
+                                Boolean isPurchased = data.getBoolean("isPurchased");
+                                String userRole = userSP.getString("userRole","");
+                                boolean isManger;
+                                if(userRole.equals("manager")){
+                                    isManger = true;
+                                }else{
+                                    isManger = false;
+                                }
+                                inquiryModelArrayList.add(new inquiryModel(inquiryNo,inquiryUser,inquiryDay,mobileArray,isInquired,isPurchased,isManger));
+                                courseRV.setAdapter(new inquiryAdapter(Dashboard.this, inquiryModelArrayList));
+
+                            }
+                        } catch (JSONException e) {
+                            //Toast.makeText(this,"Something went wrong!",Toast.LENGTH_SHORT).show();
+                        }
+                    }, error -> {
+                        Toast.makeText(this,"Something Went Wrong!",Toast.LENGTH_SHORT).show();
+                    });
+                    requestQueue_1.add(jsonObjectRequest_1);
+
                     Toast.makeText(view2.getContext(),"Start date "+startDateSTR+"end date"+endDateSTR,Toast.LENGTH_LONG).show();
                 }
             });
