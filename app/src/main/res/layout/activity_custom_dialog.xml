@@ -84,10 +84,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:text="Barcode"
+                android:fontFamily="@font/lexend_exa"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="Product"
                 android:fontFamily="@font/lexend_exa"
                 android:textColor="@color/black"
-                android:textSize="15sp" />
+                android:textSize="12sp" />
             <TextView
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
@@ -96,8 +105,25 @@
                 android:text="QTY"
                 android:fontFamily="@font/lexend_exa"
                 android:textColor="@color/black"
-                android:textSize="15sp" />
-
+                android:textSize="12sp" />
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Price"
+                android:fontFamily="@font/lexend_exa"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Amount"
+                android:fontFamily="@font/lexend_exa"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
         </LinearLayout>
         <ListView
             android:id="@+id/product_list"

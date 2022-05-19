@@ -31,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class inquiryAdapter extends RecyclerView.Adapter<inquiryAdapter.Viewfinder> {
 

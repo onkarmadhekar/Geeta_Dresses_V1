@@ -149,9 +149,13 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                     Log.d("Product_array_dialog",String.valueOf(product_array));
                     for(int j=0;j< product_array.length();j++){
                         JSONObject product = product_array.getJSONObject(j);
+                        String product_id = product.getString("productId");
                         String product_name = product.getString("productName");
                         String qty = product.getString("quantity");
-                        productArray.add(product_name +"                 "+ qty);
+                        String price = product.getString("price");
+                        String amount = String.valueOf(Integer.parseInt(qty)*Integer.parseInt(price));
+                        productArray.add(product_id+"    "+product_name +"     "+ qty+"     "+price+"     "+amount);
+                        Log.d("MobileArray",product_id+"  "+product_name +"   "+ qty+"   "+price+"   "+amount);
                     }
                     mobileArray = productArray.toArray(mobileArray);
                     Boolean isInquired = data.getBoolean("isEnquired");
@@ -301,11 +305,16 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                                 Log.d("Product_array_dialog",String.valueOf(product_array));
                                 for(int j=0;j< product_array.length();j++){
                                     JSONObject product = product_array.getJSONObject(j);
+                                    String product_id = product.getString("productId");
                                     String product_name = product.getString("productName");
                                     String qty = product.getString("quantity");
-                                    productArray.add(product_name +"                 "+ qty);
+                                    String price = product.getString("price");
+                                    String amount = String.valueOf(Integer.parseInt(qty)*Integer.parseInt(price));
+                                    productArray.add(product_id+"  "+product_name +"   "+ qty+"   "+price+"   "+amount);
+                                    Log.d("MobileArray",product_id+"  "+product_name +"   "+ qty+"   "+price+"   "+amount);
                                 }
                                 mobileArray = productArray.toArray(mobileArray);
+                                Log.d("MobileArray",String.valueOf(mobileArray));
                                 Boolean isInquired = data.getBoolean("isEnquired");
                                 Boolean isPurchased = data.getBoolean("isPurchased");
                                 String userRole = userSP.getString("userRole","");
