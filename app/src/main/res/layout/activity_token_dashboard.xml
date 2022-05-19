@@ -143,16 +143,27 @@
 
 
         </LinearLayout>
-
-        <EditText
-            android:id="@+id/prouctReasonPF"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="30dp"
+            android:fontFamily="@font/lexend_exa"
+            android:gravity="center|center_horizontal"
+            android:text="Please Enter the reason below"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+        <!--Spinner widget-->
+        <Spinner
+            android:id="@+id/coursesspinner"
             android:layout_height="50dp"
+            android:layout_width="match_parent"
             android:layout_margin="20dp"
             android:background="@drawable/recyler_back"
-            android:hint="Please add the Reason"
             android:textAlignment="center"
-            android:textColorHint="@color/white" />
+            android:autofillHints="Please add the reason"
+            />
         <Button
             android:id="@+id/InquiryDate"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"

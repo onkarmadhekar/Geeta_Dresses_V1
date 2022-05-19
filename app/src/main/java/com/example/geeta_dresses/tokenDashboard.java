@@ -5,11 +5,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,21 +41,22 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class tokenDashboard extends AppCompatActivity {
+public class tokenDashboard extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private RecyclerView courseRV;
     Constant constant;
     RequestQueue requestQueue;
     Switch inquiredSW, purchasedSW;
-    EditText reasonETV;
     JsonObjectRequest jsonObjectRequest;
     Button backBTN, nameBTN, nextBTN, dateBTN;
     TextView userName, currentTokenNumber;
     SharedPreferences userSP;
-    JSONObject response_object,object;
+    JSONObject response_object, object;
     InquiryModel inquiryModel;
     DatePickerDialog picker;
-    String dataSTR;
-
+    String dataSTR, reasonSTR;
+    String[] courses = {"Less Varieties", "High Prices",
+            "Required Other Brand", "Bad Service",
+            "Required Other Variety"};
 
     // Arraylist for storing data
     private ArrayList<productsModel> productsModelArrayList;
@@ -66,6 +72,9 @@ public class tokenDashboard extends AppCompatActivity {
         //hocks
         userName = findViewById(R.id.userNameTokenNumber);
         currentTokenNumber = findViewById(R.id.userCurrentTokenNo);
+        Spinner spino = findViewById(R.id.coursesspinner);
+        spino.setOnItemSelectedListener(this);
+
         //User data part with SP
         userSP = getSharedPreferences("userMetadata", MODE_PRIVATE);
         userName.setText(userSP.getString("userName", ""));
@@ -78,7 +87,6 @@ public class tokenDashboard extends AppCompatActivity {
         nameBTN = findViewById(R.id.nameBTN);
         nextBTN = findViewById(R.id.nextToDaBTN);
         dateBTN = findViewById(R.id.InquiryDate);
-        reasonETV = findViewById(R.id.prouctReasonPF);
         inquiredSW = findViewById(R.id.InquirySW);
         purchasedSW = findViewById(R.id.PurchasedSW);
 
@@ -117,13 +125,13 @@ public class tokenDashboard extends AppCompatActivity {
                 JSONArray data_array = response.getJSONArray("data");
                 JSONObject data = (JSONObject) data_array.get(0);
 
-                reasonETV.setText(data.getString("reason"));
+                //reasonETV.setText(data.getString("reason"));
                 dateBTN.setText(data.getString("day"));
 
-                if(data.getBoolean("isEnquired")){
+                if (data.getBoolean("isEnquired")) {
                     inquiredSW.setTextOn("ON");
                 }
-                if(data.getBoolean("isPurchased")){
+                if (data.getBoolean("isPurchased")) {
                     purchasedSW.setTextOn("ON");
                 }
 
@@ -142,7 +150,7 @@ public class tokenDashboard extends AppCompatActivity {
             } catch (JSONException e) {
                 //Toast.makeText(tokenDashboard.this,"Failed to get token details!",Toast.LENGTH_SHORT).show();
             }
-        }, error -> Toast.makeText(tokenDashboard.this,"Something Went Wrong!",Toast.LENGTH_SHORT).show());
+        }, error -> Toast.makeText(tokenDashboard.this, "Something Went Wrong!", Toast.LENGTH_SHORT).show());
 
         requestQueue.add(jsonObjectRequest);
 
@@ -162,7 +170,23 @@ public class tokenDashboard extends AppCompatActivity {
             finish();
             onBackPressed();
         });
+        // Create the instance of ArrayAdapter
+        // having the list of courses
+        ArrayAdapter ad
+                = new ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_item,
+                courses);
 
+        // set simple layout resource file
+        // for each item of spinner
+        ad.setDropDownViewResource(
+                android.R.layout
+                        .simple_spinner_dropdown_item);
+
+        // Set the ArrayAdapter (ad) data on the
+        // Spinner which binds data to spinner
+        spino.setAdapter(ad);
         //nameBTN code
         nameBTN.setOnClickListener(view -> {
             Intent intent = new Intent(tokenDashboard.this, ProductFinder.class);
@@ -199,7 +223,7 @@ public class tokenDashboard extends AppCompatActivity {
             inquiryModel.setUserName(userSP.getString("userName", ""));
             inquiryModel.setCustomerId("Customer ID");
             inquiryModel.setTokenNumber(userSP.getString("tokenNumber", ""));
-            inquiryModel.setReason(reasonETV.getText().toString());
+            inquiryModel.setReason(reasonSTR);
             if (dataSTR == null) {
                 DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
                 Date date = new Date();
@@ -226,4 +250,19 @@ public class tokenDashboard extends AppCompatActivity {
         });
     }
 
+    // Performing action when ItemSelected
+    // from spinner, Overriding onItemSelected method
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//        Toast.makeText(getApplicationContext(),
+//                courses[i],
+//                Toast.LENGTH_LONG)
+//                .show();
+        reasonSTR = courses[i];
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 }
