@@ -296,8 +296,9 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                                 JSONObject data = (JSONObject) data_array.get(i);
                                 String inquiryNo = data.getString("tokenNumber");
                                 String inquiryUser = data.getString("username");
-                                String rawDay = data.getString("createdAt");
-                                String inquiryDay = rawDay.substring(0,10);
+                                String rawDay = data.getString("day");
+                                //String inquiryDay = rawDay.substring(0,10);
+                                String inquiryDay = rawDay;
 
                                 String[] mobileArray = {};//= {"Android","IPhone","WindowsMobile","Blackberry",
 //                                "WebOS","Ubuntu","Windows7","Max OS X"};
@@ -333,7 +334,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                             //Toast.makeText(this,"Something went wrong!",Toast.LENGTH_SHORT).show();
                         }
                     }, error -> {
-                        Toast.makeText(this,"Something Went Wrong!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this,"Something Went Wrong!"+error,Toast.LENGTH_SHORT).show();
                     });
                     requestQueue_1.add(jsonObjectRequest_1);
 
