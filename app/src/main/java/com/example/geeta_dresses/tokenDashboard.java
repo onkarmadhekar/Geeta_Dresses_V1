@@ -207,7 +207,8 @@ public class tokenDashboard extends AppCompatActivity implements AdapterView.OnI
                             dateBTN.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                             String str = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
                             //setOrder_date_str(str);
-                            dataSTR = year + "/" + monthOfYear + "/" + dayOfMonth;
+
+                            dataSTR = year + "/" + (monthOfYear + 1) + "/" + dayOfMonth;
 
                         }
                     }, year, month, day);
