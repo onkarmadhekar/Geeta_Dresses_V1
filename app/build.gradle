@@ -1,5 +1,5 @@
 apply plugin : 'com.android.application'
-apply plugin : 'realm-android'
+//apply plugin : 'realm-android'
 //plugins {
 //    id 'com.android.application'
 //}
@@ -55,9 +55,9 @@ android {
     }
 }
 
-realm {
-    syncEnabled = true
-}
+//realm {
+//    syncEnabled = true
+//}
 
 dependencies {
 
