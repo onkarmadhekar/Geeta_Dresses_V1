@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="20dp"
+        android:padding="10dp"
+        android:layout_gravity="bottom">
+    <EditText
+        android:id="@+id/prouctIdPFD"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/recyler_back"
+        android:textAlignment="center"
+        android:editable="true"
+        android:hint="Please add the Barcode"
+        android:textColorHint="@color/white"/>
+
+    <EditText
+        android:id="@+id/prouctNamePFD"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/recyler_back"
+        android:textAlignment="center"
+        android:editable="true"
+        android:hint="Please add the Product Name"
+        android:textColorHint="@color/white"/>
+
+    <EditText
+        android:id="@+id/prouctPricePFD"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/recyler_back"
+        android:textAlignment="center"
+        android:editable="true"
+        android:hint="Please add the Product Price"
+        android:textColorHint="@color/white"/>
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>
