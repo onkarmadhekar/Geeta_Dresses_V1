@@ -7,10 +7,10 @@
     <string name="navi_drawer_close">Close navigation drawer</string>
     <string name="Add_Order">Add Order</string>
     <string-array name="languages">
-        <item>C</item>
-        <item>C++</item>
-        <item>Java</item>
-        <item>JavaScript</item>
-        <item>VisualBasic</item>
+        <item>Less Varieties</item>
+        <item>High Prices</item>
+        <item>Bad Service</item>
+        <item>Required other Brand</item>
+        <item>Required other Variety</item>
     </string-array>
 </resources>
