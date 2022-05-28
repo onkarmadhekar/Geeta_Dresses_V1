@@ -11,7 +11,7 @@
         android:padding="10dp"
         android:layout_gravity="bottom">
     <EditText
-        android:id="@+id/prouctIdPFD"
+        android:id="@+id/productIdPFD"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_margin="20dp"

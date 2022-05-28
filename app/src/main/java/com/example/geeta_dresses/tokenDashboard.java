@@ -54,11 +54,12 @@ public class tokenDashboard extends AppCompatActivity {//implements AdapterView.
     Switch inquiredSW, purchasedSW;
     JsonObjectRequest jsonObjectRequest;
     Button backBTN, nameBTN, nextBTN, dateBTN;
-    TextView userName, currentTokenNumber;
+    TextView userName, currentTokenNumber , tvTotalAmount;
     SharedPreferences userSP;
     JSONObject response_object, object;
     InquiryModel inquiryModel;
     DatePickerDialog picker;
+    int totalAmount;
     String dataSTR, reasonSTR;
     String[] courses = {"Less Varieties", "High Prices",
             "Required Other Brand", "Bad Service",
@@ -98,6 +99,7 @@ public class tokenDashboard extends AppCompatActivity {//implements AdapterView.
         dateBTN = findViewById(R.id.InquiryDate);
         inquiredSW = findViewById(R.id.InquirySW);
         purchasedSW = findViewById(R.id.PurchasedSW);
+        tvTotalAmount = findViewById(R.id.idAmount);
 
 
         // here we have created new array list and added data to it.
@@ -155,6 +157,7 @@ public class tokenDashboard extends AppCompatActivity {//implements AdapterView.
                     String qty = product.getString("quantity");
                     String ActualPrice = product.getString("price");
                     String productId = product.getString("productId");
+                    totalAmount = Integer.parseInt(qty) * Integer.parseInt(ActualPrice);
                     productsModelArrayList.add(new productsModel(product_name, qty, ActualPrice, productId));
                     courseRV.setAdapter(new productAdapter(tokenDashboard.this, productsModelArrayList));
 
@@ -179,167 +182,54 @@ public class tokenDashboard extends AppCompatActivity {//implements AdapterView.
         courseRV.setLayoutManager(linearLayoutManager);
         courseRV.setAdapter(productAdapter);
 
+        tvTotalAmount.setText(String.valueOf(totalAmount));
         //backBTN code
         backBTN.setOnClickListener(view -> {
             finish();
             onBackPressed();
         });
-//        // Create the instance of ArrayAdapter
-//        // having the list of courses
-//        ArrayAdapter ad
-//                = new ArrayAdapter(
-//                this,
-//                android.R.layout.simple_spinner_item,
-//                courses);
-//
-//        // set simple layout resource file
-//        // for each item of spinner
-//        ad.setDropDownViewResource(
-//                android.R.layout
-//                        .simple_spinner_dropdown_item);
-
-        // Set the ArrayAdapter (ad) data on the
-        // Spinner which binds data to spinner
-//        spino.setAdapter(ad);
-        //nameBTN code
-//        nameBTN.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // Create an alert builder
-//                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-//                builder.setTitle("Name");
-//
-//                // set the custom layout
-//                final View customLayout
-//                        = getLayoutInflater()
-//                        .inflate(
-//                                R.layout.productfinder_card_dialog, null);
-//                builder.setView(customLayout);
-//
-//                // add a button
-//                builder
-//                        .setPositiveButton(
-//                                "OK",
-//                                new DialogInterface.OnClickListener() {
-//
-//                                    @Override
-//                                    public void onClick(
-//                                            DialogInterface dialog,
-//                                            int which) {
-//
-//                                        // send data from the
-//                                        // AlertDialog to the Activity
-//                                        EditText product_id = (EditText) customLayout.findViewById(R.id.prouctIdPF);
-//                                        EditText product_name = (EditText) customLayout.findViewById(R.id.prouctNamePFD);
-//                                        EditText product_price = (EditText) customLayout.findViewById(R.id.prouctPricePFD);
-//                                        Toast.makeText(getApplicationContext(), product_id.getText().toString() + "  " + product_name.getText().toString()+"  "+product_price.getText().toString(),Toast.LENGTH_LONG).show();
-//
-//                                    }
-//                                });
-//
-//                // create and show
-//                // the alert dialog
-//                AlertDialog dialog = builder.create();
-//                dialog.show();
-//            }
-//
-//
-//    });
-//        nameBTN.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Context context = view.getContext();
-//                AlertDialog.Builder builder=new AlertDialog.Builder(view.getContext());
-//                View v= LayoutInflater.from(context).inflate(R.layout.productfinder_card_dialog,null);
-//                TextInputEditText product_id = v.findViewById(R.id.prouctIdPF);
-//                TextInputEditText product_name = v.findViewById(R.id.prouctNamePFD);
-//                TextInputEditText product_price = v.findViewById(R.id.prouctPricePFD);
-//                builder.setView(v);
-//
-//                //code for the positive button
-//                builder.setPositiveButton("Next", (dialog, which) -> {
-//                    Toast.makeText(context,product_id.getText().toString() + "  " + product_name.getText().toString()+"  "+product_price.getText().toString(),Toast.LENGTH_LONG).show();
-////                if ( !product_id.getText().toString().isEmpty() && !product_name.getText().toString().isEmpty() && !product_price.getText().toString().isEmpty()) {
-////                    Toast.makeText(v.getContext(),"Complete the formality", Toast.LENGTH_SHORT).show();
-////                }
-////                else{
-////                    Toast.makeText(v.getContext(),product_id.getText().toString() + "  " + product_name.getText().toString()+"  "+product_price.getText().toString(),Toast.LENGTH_LONG).show();
-////                    productsModelArrayList.add(new productsModel(product_id.getText().toString(), "1", product_price.getText().toString(), product_id.getText().toString()));
-////                }
-//                });
-//                //code for the negative button
-//                builder.setNegativeButton("back", (dialog, which) -> dialog.dismiss());
-//
-//                //output line for the calling
-//                final AlertDialog alertDialog=builder.create();
-//                alertDialog.show();
-//
-//                //designing for buttons
-//                //positive
-//                Button button_positive = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-//                //button_positive.setBackgroundColor(Color.GRAY);
-//                button_positive.setPadding(20, 5, 20, 5);
-//                button_positive.setTextColor(Color.BLACK);
-//                //negative
-//                Button button_negative = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-//                //button_negative.setBackgroundColor(Color.GRAY);
-//                button_negative.setPadding(20, 5, 20, 5);
-//                button_negative.setTextColor(Color.BLACK);
-//
-//
-//
-//            }
-//        });
         nameBTN.setOnClickListener(view -> {
-            Intent intent = new Intent(tokenDashboard.this, ProductFinder.class);
-            intent.putExtra("activity", "tokenDashboard");
-            startActivity(intent);
-        });
-//        nameBTN.setOnClickListener(view -> {
-////            Intent intent = new Intent(tokenDashboard.this, ProductFinder.class);
-////            intent.putExtra("activity", "tokenDashboard");
-////            startActivity(intent);
-////            Toast.makeText(getApplicationContext(), "Clicked on Name", Toast.LENGTH_SHORT).show();
-//            //defination for the dynamic dialog box
-//            AlertDialog.Builder builder=new AlertDialog.Builder(view.getContext());
-//            View v= LayoutInflater.from(view.getContext()).inflate(R.layout.productfinder_card_dialog,null);
-//            EditText product_id = v.findViewById(R.id.prouctIdPF);
-//            EditText product_name = v.findViewById(R.id.prouctNamePFD);
-//            EditText product_price = v.findViewById(R.id.prouctPricePFD);
-//            builder.setView(v);
-//
-//            //code for the positive button
-//            builder.setPositiveButton("Next", (dialog, which) -> {
-//                Toast.makeText(v.getContext(),product_id.getText().toString() + "  " + product_name.getText().toString()+"  "+product_price.getText().toString(),Toast.LENGTH_LONG).show();
-////                if ( !product_id.getText().toString().isEmpty() && !product_name.getText().toString().isEmpty() && !product_price.getText().toString().isEmpty()) {
-////                    Toast.makeText(v.getContext(),"Complete the formality", Toast.LENGTH_SHORT).show();
-////                }
-////                else{
-////                    Toast.makeText(v.getContext(),product_id.getText().toString() + "  " + product_name.getText().toString()+"  "+product_price.getText().toString(),Toast.LENGTH_LONG).show();
-////                    productsModelArrayList.add(new productsModel(product_id.getText().toString(), "1", product_price.getText().toString(), product_id.getText().toString()));
-////                }
-//            });
-//            //code for the negative button
-//            builder.setNegativeButton("back", (dialog, which) -> dialog.dismiss());
-//
-//            //output line for the calling
-//            final AlertDialog alertDialog=builder.create();
-//            alertDialog.show();
-//
-//            //designing for buttons
-//            //positive
-//            Button button_positive = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-//            //button_positive.setBackgroundColor(Color.GRAY);
-//            button_positive.setPadding(20, 5, 20, 5);
-//            button_positive.setTextColor(Color.BLACK);
-//            //negative
-//            Button button_negative = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-//            //button_negative.setBackgroundColor(Color.GRAY);
-//            button_negative.setPadding(20, 5, 20, 5);
-//            button_negative.setTextColor(Color.BLACK);
-//
-//
-//    });
+            //defination for the dynamic dialog box
+            AlertDialog.Builder builder=new AlertDialog.Builder(view.getContext());
+            View v= LayoutInflater.from(view.getContext()).inflate(R.layout.productfinder_card_dialog,null);
+            EditText product_id = v.findViewById(R.id.productIdPFD);
+            EditText product_name = v.findViewById(R.id.prouctNamePFD);
+            EditText product_price = v.findViewById(R.id.prouctPricePFD);
+            builder.setView(v);
+
+            //code for the positive button
+            builder.setPositiveButton("Next", (dialog, which) -> {
+                 Toast.makeText(v.getContext(),product_id.getText().toString() + "  " + product_name.getText().toString()+"  "+product_price.getText().toString(),Toast.LENGTH_LONG).show();
+                if ( product_id.getText().toString().isEmpty() && product_name.getText().toString().isEmpty() && product_price.getText().toString().isEmpty()) {
+                    Toast.makeText(v.getContext(),"Complete the formality", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(v.getContext(),product_id.getText().toString() + "  " + product_name.getText().toString()+"  "+product_price.getText().toString(),Toast.LENGTH_LONG).show();
+                    totalAmount = Integer.parseInt(product_price.getText().toString()) * Integer.parseInt(product_price.getText().toString());
+                    productsModelArrayList.add(new productsModel(product_id.getText().toString(), "1", product_price.getText().toString(), product_name.getText().toString()));
+                }
+            });
+            //code for the negative button
+            builder.setNegativeButton("back", (dialog, which) -> dialog.dismiss());
+
+            //output line for the calling
+            final AlertDialog alertDialog=builder.create();
+            alertDialog.show();
+
+            //designing for buttons
+            //positive
+            Button button_positive = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            //button_positive.setBackgroundColor(Color.GRAY);
+            button_positive.setPadding(20, 5, 20, 5);
+            button_positive.setTextColor(Color.BLACK);
+            //negative
+            Button button_negative = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+            //button_negative.setBackgroundColor(Color.GRAY);
+            button_negative.setPadding(20, 5, 20, 5);
+            button_negative.setTextColor(Color.BLACK);
+
+
+    });
         dateBTN.setOnClickListener(v ->
 
     {

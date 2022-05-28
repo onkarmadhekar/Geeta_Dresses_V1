@@ -300,7 +300,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                                 //String inquiryDay = rawDay.substring(0,10);
                                 String inquiryDay = rawDay;
 
-                                String[] mobileArray = {};//= {"Android","IPhone","WindowsMobile","Blackberry",
+                                String[] mobileArray = {};//= {"Android","IPhone","WindowsMobile","Blackberry",-
 //                                "WebOS","Ubuntu","Windows7","Max OS X"};
                                 ArrayList<String> productArray = new ArrayList<String>();
                                 JSONArray product_array = data.getJSONArray("product");
