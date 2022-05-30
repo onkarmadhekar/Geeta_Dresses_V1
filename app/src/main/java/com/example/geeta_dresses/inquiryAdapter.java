@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -110,6 +111,7 @@ public class inquiryAdapter extends RecyclerView.Adapter<inquiryAdapter.Viewfind
                 isInquired.setChecked(inquiryModelArrayList.get(getAdapterPosition()).getInquired());
                 CheckBox isPurchased = view.findViewById(R.id.checkBox2);
                 isPurchased.setChecked(inquiryModelArrayList.get(getAdapterPosition()).getPurchased());
+                EditText billNoDialog = view.findViewById(R.id.billNoDialog);
 
                 //code for the listview in there
                 ArrayAdapter adapter = new ArrayAdapter<String>(context,
