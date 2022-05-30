@@ -96,8 +96,8 @@ public class inquiryAdapter extends RecyclerView.Adapter<inquiryAdapter.Viewfind
             itemView.setOnClickListener(v -> {
 
                 //definition for the dynamic dialog box
-                AlertDialog.Builder builder=new AlertDialog.Builder(v.getContext());
-                View view=LayoutInflater.from(context).inflate(R.layout.activity_custom_dialog,null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                View view = LayoutInflater.from(context).inflate(R.layout.activity_custom_dialog, null);
 
                 builder.setView(view);
                 //hocks and code
@@ -112,6 +112,11 @@ public class inquiryAdapter extends RecyclerView.Adapter<inquiryAdapter.Viewfind
                 CheckBox isPurchased = view.findViewById(R.id.checkBox2);
                 isPurchased.setChecked(inquiryModelArrayList.get(getAdapterPosition()).getPurchased());
                 EditText billNoDialog = view.findViewById(R.id.billNoDialog);
+                String billNoSTR = inquiryModelArrayList.get(getAdapterPosition()).getBillNo();
+                if(!(billNoSTR.length() == 0)){
+                    billNoDialog.setText(billNoSTR);
+                }
+
 
                 //code for the listview in there
                 ArrayAdapter adapter = new ArrayAdapter<String>(context,
@@ -122,45 +127,47 @@ public class inquiryAdapter extends RecyclerView.Adapter<inquiryAdapter.Viewfind
                 //code for the positive button
                 builder.setPositiveButton("Approve", (dialog, which) -> {
                     Boolean isPrivillaged = inquiryModelArrayList.get(getAdapterPosition()).getManger();
-                    if(isPrivillaged){
-                        requestQueue = Volley.newRequestQueue(context);
-                        constant = new Constant();
+                    if (isPrivillaged) {
+                        if (!billNoDialog.getText().toString().isEmpty()) {
+                            requestQueue = Volley.newRequestQueue(context);
+                            constant = new Constant();
 
-                        // URL
-                        userSP = context.getSharedPreferences("userMetadata", context.MODE_PRIVATE);
-                        String url = constant.getURL() + constant.getPORT() + constant.getGET_TOKEN_DETAILS() + inquiryModelArrayList.get(getAdapterPosition()).getInquiry_no();
-                        data = new JSONObject();
-                        try {
-                            data.put("isApproved",true);
-                            data.put("approvedBy",userSP.getString("userName",""));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            // URL
+                            userSP = context.getSharedPreferences("userMetadata", context.MODE_PRIVATE);
+                            String url = constant.getURL() + constant.getPORT() + constant.getGET_TOKEN_DETAILS() + inquiryModelArrayList.get(getAdapterPosition()).getInquiry_no();
+                            data = new JSONObject();
+                            try {
+                                data.put("isApproved", true);
+                                data.put("approvedBy", userSP.getString("userName", ""));
+                                data.put("billNo", billNoDialog.getText().toString());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Log.d("URL here", String.valueOf(data));
+                            jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, data, new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    Toast.makeText(context, "Approved the inquiry with bill no", Toast.LENGTH_SHORT).show();
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.d("Onkar See Here Error", error.toString());
+                                }
+                            });
+                            requestQueue.add(jsonObjectRequest);
+
+                        }else {  Toast.makeText(context, "Please add the bill no it is mandatory!", Toast.LENGTH_SHORT).show();
                         }
-                        Log.d("URL here", String.valueOf(data));
-                        jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, data, new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                Log.d("Onkar See Here",response.toString());
-                                Toast.makeText(context,"Manager", Toast.LENGTH_SHORT).show();
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.d("Onkar See Here Error",error.toString());
-                            }
-                        });
-                        requestQueue.add(jsonObjectRequest);
-
-
-                    }else {
-                        Toast.makeText(context, "Not Manager", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "Only Manager have this privillages", Toast.LENGTH_SHORT).show();
                     }
                 });
                 //code for the negative button
                 builder.setNegativeButton("back", (dialog, which) -> dialog.dismiss());
 
                 //output line for the calling
-                final AlertDialog alertDialog=builder.create();
+                final AlertDialog alertDialog = builder.create();
                 alertDialog.show();
 
                 //designing for buttons

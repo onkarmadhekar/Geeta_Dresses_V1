@@ -165,7 +165,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="vertical">
             <EditText
                 android:id="@+id/billNoDialog"
                 android:layout_weight="1"
@@ -176,6 +176,7 @@
                 android:textAlignment="center"
                 android:hint="Please add the Bill no"
                 android:textColorHint="@color/white"/>
+
 
         </LinearLayout>
     </LinearLayout>

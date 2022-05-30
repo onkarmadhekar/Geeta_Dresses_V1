@@ -162,13 +162,20 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                     Boolean isInquired = data.getBoolean("isEnquired");
                     Boolean isPurchased = data.getBoolean("isPurchased");
                     String userRole = userSP.getString("userRole","");
+                    String billNo;
+                    try {
+                        billNo = data.getString("billNo");
+                    }catch(JSONException e){
+                        billNo = "";
+                    }
+
                     boolean isManger;
                     if(userRole.equals("manager")){
                         isManger = true;
                     }else{
                         isManger = false;
                     }
-                    inquiryModelArrayList.add(new inquiryModel(inquiryNo,inquiryUser,inquiryDay,mobileArray,isInquired,isPurchased,isManger));
+                    inquiryModelArrayList.add(new inquiryModel(inquiryNo,inquiryUser,inquiryDay,mobileArray,isInquired,isPurchased,isManger,billNo));
                     courseRV.setAdapter(new inquiryAdapter(Dashboard.this, inquiryModelArrayList));
 
                 }
@@ -320,13 +327,20 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                                 Boolean isInquired = data.getBoolean("isEnquired");
                                 Boolean isPurchased = data.getBoolean("isPurchased");
                                 String userRole = userSP.getString("userRole","");
+                                String billNo;
+                                try {
+                                    billNo = data.getString("billNo");
+                                }catch(JSONException e){
+                                    billNo = "";
+                                }
+
                                 boolean isManger;
                                 if(userRole.equals("manager")){
                                     isManger = true;
                                 }else{
                                     isManger = false;
                                 }
-                                inquiryModelArrayList.add(new inquiryModel(inquiryNo,inquiryUser,inquiryDay,mobileArray,isInquired,isPurchased,isManger));
+                                inquiryModelArrayList.add(new inquiryModel(inquiryNo,inquiryUser,inquiryDay,mobileArray,isInquired,isPurchased,isManger,billNo));
                                 courseRV.setAdapter(new inquiryAdapter(Dashboard.this, inquiryModelArrayList));
 
                             }
