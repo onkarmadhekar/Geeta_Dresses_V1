@@ -241,7 +241,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                                 startDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                                 String str = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
                                 //setOrder_date_str(str);
-                                startDateSTR = year + "/" + monthOfYear + "/" + dayOfMonth;
+                                startDateSTR = year + "/" + (monthOfYear + 1) + "/" + dayOfMonth;
 
                             }
                         }, year, month, day);
@@ -262,7 +262,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                                 endDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                                 String str = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
                                 //setOrder_date_str(str);
-                                endDateSTR = year + "/" + monthOfYear + "/" + dayOfMonth;
+                                endDateSTR = year + "/" + (monthOfYear + 1) + "/" + dayOfMonth;
 
                             }
                         }, year, month, day);
