@@ -123,6 +123,7 @@ public class tokenNumberCreation extends AppCompatActivity {
             updatedData.put("day", date);
             updatedData.put("isEnquired",false);
             updatedData.put("isPurchased",false);
+            updatedData.put("isApproved", false);
             SharedPreferences.Editor tokenEdit = userSP.edit();
             tokenEdit.putString("tokenNumber",getTokenText);
             tokenEdit.apply();
