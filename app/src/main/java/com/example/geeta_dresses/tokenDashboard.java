@@ -178,9 +178,9 @@ public class tokenDashboard extends AppCompatActivity {//implements AdapterView.
         // here we are creating vertical list so we will provide orientation as vertical
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
-        // in below two lines we are setting layoutmanager and adapter to our recycler view.
-        courseRV.setLayoutManager(linearLayoutManager);
-        courseRV.setAdapter(productAdapter);
+//        // in below two lines we are setting layoutmanager and adapter to our recycler view.
+//        courseRV.setLayoutManager(linearLayoutManager);
+//        courseRV.setAdapter(productAdapter);
 
         tvTotalAmount.setText(String.valueOf(totalAmount));
         //backBTN code
@@ -207,6 +207,9 @@ public class tokenDashboard extends AppCompatActivity {//implements AdapterView.
                     Toast.makeText(v.getContext(),product_id.getText().toString() + "  " + product_name.getText().toString()+"  "+product_price.getText().toString(),Toast.LENGTH_LONG).show();
                     totalAmount = Integer.parseInt(product_price.getText().toString()) * Integer.parseInt(product_price.getText().toString());
                     productsModelArrayList.add(new productsModel(product_id.getText().toString(), "1", product_price.getText().toString(), product_name.getText().toString()));
+                    //productAdapter.notifyItemChanged(productsModelArrayList.size()-1);
+                 //   productAdapter.notifyDataSetChanged();
+                    courseRV.setAdapter(productAdapter);
                 }
             });
             //code for the negative button
@@ -289,6 +292,9 @@ public class tokenDashboard extends AppCompatActivity {//implements AdapterView.
 
         startActivity(intent);
     });
+        // in below two lines we are setting layoutmanager and adapter to our recycler view.
+        courseRV.setLayoutManager(linearLayoutManager);
+        courseRV.setAdapter(productAdapter);
 }
 
 // Performing action when ItemSelected
