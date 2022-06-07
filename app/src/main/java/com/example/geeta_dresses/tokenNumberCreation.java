@@ -22,6 +22,9 @@ import com.example.geeta_dresses.constants.Constant;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class tokenNumberCreation extends AppCompatActivity {
 
     TextView userName, userDescription, tokenNumber;
@@ -110,10 +113,16 @@ public class tokenNumberCreation extends AppCompatActivity {
         // URL
         String update_url = constant_new.getURL() + constant_new.getPORT() + constant_new.getUPDATE_TOKEN();
         // JSON OBJECT FOR POST
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String date = sdf.format(new Date());
         JSONObject updatedData = new JSONObject();
         try {
             updatedData.put("username",userNameText);
             updatedData.put("tokenNumber",getTokenText);
+            updatedData.put("reason","null");
+            updatedData.put("day", date);
+            updatedData.put("isEnquired",false);
+            updatedData.put("isPurchased",false);
             SharedPreferences.Editor tokenEdit = userSP.edit();
             tokenEdit.putString("tokenNumber",getTokenText);
             tokenEdit.apply();
