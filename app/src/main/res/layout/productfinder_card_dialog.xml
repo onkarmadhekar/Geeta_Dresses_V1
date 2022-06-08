@@ -17,6 +17,7 @@
         android:layout_margin="20dp"
         android:background="@drawable/recyler_back"
         android:textAlignment="center"
+        android:inputType="number"
         android:editable="true"
         android:hint="Please add the Barcode"
         android:textColorHint="@color/white"/>
@@ -39,6 +40,7 @@
         android:layout_margin="20dp"
         android:background="@drawable/recyler_back"
         android:textAlignment="center"
+        android:inputType="number"
         android:editable="true"
         android:hint="Please add the Product Price"
         android:textColorHint="@color/white"/>

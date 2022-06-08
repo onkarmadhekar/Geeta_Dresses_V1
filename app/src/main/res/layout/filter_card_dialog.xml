@@ -71,7 +71,7 @@
         android:padding="5dp"
         android:layout_gravity="center"
         android:switchMinWidth="50dp"
-        android:text="Inquired"
+        android:text="Approved"
         android:textAlignment="center"
         android:textColor="@color/denim_blue"
         android:textSize="15sp"
