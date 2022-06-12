@@ -6,8 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -38,9 +38,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.geeta_dresses.constants.Constant;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,17 +46,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
 
 public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     //variable
     private RecyclerView courseRV;
     Constant constant, constant_1;
-    JsonObjectRequest jsonObjectRequest, jsonObjectRequest_1;
-    JSONObject object, object_1;
-    RequestQueue requestQueue, requestQueue_1;
+    JsonObjectRequest jsonObjectRequest, jsonObjectRequest_1, jsonObjectRequestCSV;
+    JSONObject object, object_1,objectCSV;
+    RequestQueue requestQueue, requestQueue_1,requestQueueCSV;
     JSONObject response_object, response_object_1;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -359,11 +355,11 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
             requestQueue_1 = Volley.newRequestQueue(this);
 //            String url1 = constant_1.getURL() + constant_1.getPORT() + constant_1.getUPDATE_TOKEN() + "filter?from=" + startDateSTR + "&to=" + endDateSTR + "&isApproved=" + ApprovedSW.isChecked();
             String url2 = constant_1.getURL() + constant_1.getPORT() + constant_1.getUPDATE_TOKEN() + "getCSV?from=" + startDateSTR + "&to=" + endDateSTR + "&isApproved=" + ApprovedSW.isChecked();
-            object_1 = new JSONObject();
             String urlO ;
             if(typeHere == "Download CSV"){
-                urlO = url2;
-                Toast.makeText(this,"WE ARE in DOWNLOAD",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url2));
+                startActivity(intent);
             }else{
                 String url1 = constant_1.getURL() + constant_1.getPORT() + constant_1.getUPDATE_TOKEN() + "filter?from=" + startDateSTR + "&to=" + endDateSTR + "&isApproved=" + ApprovedSW.isChecked();
                 jsonObjectRequest_1 = new JsonObjectRequest(Request.Method.GET, url1, object_1, response -> {
