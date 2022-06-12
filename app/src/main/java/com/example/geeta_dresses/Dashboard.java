@@ -64,6 +64,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
     NavigationView navigationView;
     Toolbar toolbar;
     ExtendedFloatingActionButton addFab, addTokenbtn, filterbtn;
+    Button downloadCSV;
     //FloatingActionButton addTokenbtn;
     SharedPreferences spLogin, spToken, spUserData, userSP;
     TextView inquiryCount;//, addTokenTV;
@@ -94,6 +95,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         addFab = findViewById(R.id.add_fab);
         filterbtn = findViewById(R.id.filterbtn);
         inquiryCount = findViewById(R.id.textView4);
+        downloadCSV = findViewById(R.id.dowloadCSV);
         //User data part with SP
         userSP = getSharedPreferences("userMetadata", MODE_PRIVATE);
 
@@ -226,88 +228,144 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
             startActivity(addOrderIntent);
             //Toast.makeText(getApplicationContext(), "Clicked on add order", Toast.LENGTH_SHORT).show();
         });
+        downloadCSV.setOnClickListener(view -> {
+            filterCode(view,"Download CSV");
+        });
 
         filterbtn.setOnClickListener(view -> {
-            Toast.makeText(Dashboard.this, "Clicked filter!!", Toast.LENGTH_SHORT).show();
-            //defination for the dynamic dialog box
-            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-            View view2 = LayoutInflater.from(view.getContext()).inflate(R.layout.filter_card_dialog, null);
-            Button startDate = view2.findViewById(R.id.startDate);
-            Button endDate = view2.findViewById(R.id.endDate);
-            Switch ApprovedSW = view2.findViewById(R.id.ApprovedSW);
-            builder.setView(view2);
+            filterCode(view,"Set Filter");
+        });
+    }
 
-            startDate.setOnClickListener(view1 -> {
-                final Calendar cldr = Calendar.getInstance();
-                int day = cldr.get(Calendar.DAY_OF_MONTH);
-                int month = cldr.get(Calendar.MONTH);
-                int year = cldr.get(Calendar.YEAR);
-                // date picker dialog
-                picker = new DatePickerDialog(Dashboard.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                String monthOfYearSTR = String.valueOf((monthOfYear)+1),dayOfMonthSTR = String.valueOf(dayOfMonth);
-                                if((monthOfYear + 1)<9){
-                                    monthOfYearSTR = 0+String.valueOf((monthOfYear)+1);
-                                }
-                                if((dayOfMonth + 1)<9){
-                                    dayOfMonthSTR = 0+String.valueOf(dayOfMonth);
-                                }
-                                startDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-                                String str = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
-                                //setOrder_date_str(str);
-                                startDateSTR = year + "/" + monthOfYearSTR + "/" + dayOfMonthSTR;
 
+    @Override
+    public void onBackPressed() {
+
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            //super.onBackPressed();
+            if (pressedTime + 2000 > System.currentTimeMillis()) {
+                super.onBackPressed();
+                finish();
+                finishAffinity();
+            } else {
+                Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_SHORT).show();
+            }
+            pressedTime = System.currentTimeMillis();
+        }
+
+    }
+
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        View view ;
+
+
+        switch (item.getItemId()) {
+            case R.id.nav_token:
+                startActivity(new Intent(this, tokenHome.class));
+                return true;
+
+            case R.id.logout:
+                spLogin = getSharedPreferences("login", MODE_PRIVATE);
+                spLogin.edit().clear().apply();
+
+                spToken = getSharedPreferences("tokenSharedPreferences", MODE_PRIVATE);
+                spToken.edit().clear().apply();
+
+                spUserData = getSharedPreferences("userMetadata", MODE_PRIVATE);
+                spUserData.edit().clear().apply();
+
+                Toast.makeText(this, "Logged Out Successfully", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void filterCode(View view,String typeHere){
+        Toast.makeText(Dashboard.this, "Clicked filter!!", Toast.LENGTH_SHORT).show();
+        //defination for the dynamic dialog box
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        View view2 = LayoutInflater.from(view.getContext()).inflate(R.layout.filter_card_dialog, null);
+        Button startDate = view2.findViewById(R.id.startDate);
+        Button endDate = view2.findViewById(R.id.endDate);
+        Switch ApprovedSW = view2.findViewById(R.id.ApprovedSW);
+        builder.setView(view2);
+
+        startDate.setOnClickListener(view1 -> {
+            final Calendar cldr = Calendar.getInstance();
+            int day = cldr.get(Calendar.DAY_OF_MONTH);
+            int month = cldr.get(Calendar.MONTH);
+            int year = cldr.get(Calendar.YEAR);
+            // date picker dialog
+            picker = new DatePickerDialog(Dashboard.this,
+                    new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            String monthOfYearSTR = String.valueOf((monthOfYear)+1),dayOfMonthSTR = String.valueOf(dayOfMonth);
+                            if((monthOfYear + 1)<9){
+                                monthOfYearSTR = 0+String.valueOf((monthOfYear)+1);
                             }
-                        }, year, month, day);
-                picker.show();
-
-            });
-
-            endDate.setOnClickListener(view1 -> {
-                final Calendar cldr = Calendar.getInstance();
-                int day = cldr.get(Calendar.DAY_OF_MONTH);
-                int month = cldr.get(Calendar.MONTH);
-                int year = cldr.get(Calendar.YEAR);
-                // date picker dialog
-                picker = new DatePickerDialog(Dashboard.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                String monthOfYearSTR = String.valueOf((monthOfYear)+1),dayOfMonthSTR = String.valueOf(dayOfMonth);
-                                if((monthOfYear + 1)<9){
-                                    monthOfYearSTR = 0+String.valueOf((monthOfYear)+1);
-                                }
-                                if((dayOfMonth + 1)<9){
-                                    dayOfMonthSTR = 0+String.valueOf(dayOfMonth);
-                                }
-                                endDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-                                String str = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
-                                //setOrder_date_str(str);
-                                endDateSTR = year + "/" + monthOfYearSTR + "/" + dayOfMonthSTR;
-
-
+                            if((dayOfMonth + 1)<9){
+                                dayOfMonthSTR = 0+String.valueOf(dayOfMonth);
                             }
-                        }, year, month, day);
-                picker.show();
-            });
+                            startDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            String str = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                            //setOrder_date_str(str);
+                            startDateSTR = year + "/" + monthOfYearSTR + "/" + dayOfMonthSTR;
 
-            //code for the positive button
-            builder.setPositiveButton("Set Filter", (dialog, which) -> {
-                // Onkar Write Code Here
-                constant_1 = new Constant();
-                requestQueue_1 = Volley.newRequestQueue(this);
-//                    String url1 = constant_1.getURL() + constant_1.getPORT() + constant_1.getUPDATE_TOKEN() +"filter&isApproved" + ApprovedSW.isChecked();
-//                    if ((TextUtils.isEmpty(startDate.getText())) && (TextUtils.isEmpty(endDate.getText()))){
-//                        url1 = constant_1.getURL() + constant_1.getPORT() + constant_1.getUPDATE_TOKEN() +"filter&isApproved" + ApprovedSW.isChecked();
-//                    }else {
-//                        url1 = constant_1.getURL() + constant_1.getPORT() + constant_1.getUPDATE_TOKEN() + "filter?from=" + startDateSTR + "&to=" + endDateSTR + "&isApproved" + ApprovedSW.isChecked();
-//                    }
+                        }
+                    }, year, month, day);
+            picker.show();
+
+        });
+
+        endDate.setOnClickListener(view1 -> {
+            final Calendar cldr = Calendar.getInstance();
+            int day = cldr.get(Calendar.DAY_OF_MONTH);
+            int month = cldr.get(Calendar.MONTH);
+            int year = cldr.get(Calendar.YEAR);
+            // date picker dialog
+            picker = new DatePickerDialog(Dashboard.this,
+                    new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            String monthOfYearSTR = String.valueOf((monthOfYear)+1),dayOfMonthSTR = String.valueOf(dayOfMonth);
+                            if((monthOfYear + 1)<9){
+                                monthOfYearSTR = 0+String.valueOf((monthOfYear)+1);
+                            }
+                            if((dayOfMonth + 1)<9){
+                                dayOfMonthSTR = 0+String.valueOf(dayOfMonth);
+                            }
+                            endDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            String str = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                            //setOrder_date_str(str);
+                            endDateSTR = year + "/" + monthOfYearSTR + "/" + dayOfMonthSTR;
+
+
+                        }
+                    }, year, month, day);
+            picker.show();
+        });
+
+        //code for the positive button
+        builder.setPositiveButton(typeHere, (dialog, which) -> {
+            // Onkar Write Code Here
+            constant_1 = new Constant();
+            requestQueue_1 = Volley.newRequestQueue(this);
+//            String url1 = constant_1.getURL() + constant_1.getPORT() + constant_1.getUPDATE_TOKEN() + "filter?from=" + startDateSTR + "&to=" + endDateSTR + "&isApproved=" + ApprovedSW.isChecked();
+            String url2 = constant_1.getURL() + constant_1.getPORT() + constant_1.getUPDATE_TOKEN() + "getCSV?from=" + startDateSTR + "&to=" + endDateSTR + "&isApproved=" + ApprovedSW.isChecked();
+            object_1 = new JSONObject();
+            String urlO ;
+            if(typeHere == "Download CSV"){
+                urlO = url2;
+                Toast.makeText(this,"WE ARE in DOWNLOAD",Toast.LENGTH_SHORT).show();
+            }else{
                 String url1 = constant_1.getURL() + constant_1.getPORT() + constant_1.getUPDATE_TOKEN() + "filter?from=" + startDateSTR + "&to=" + endDateSTR + "&isApproved=" + ApprovedSW.isChecked();
-                Log.d("URl Here",url1);
-                object_1 = new JSONObject();
-
                 jsonObjectRequest_1 = new JsonObjectRequest(Request.Method.GET, url1, object_1, response -> {
 
                     try {
@@ -366,228 +424,99 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                         //Toast.makeText(this,"Something went wrong!",Toast.LENGTH_SHORT).show();
                     }
                 }, error -> {
-                    Toast.makeText(this, "Something Went Wrong!" + error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Something Went Wrong! hjhj" + error, Toast.LENGTH_SHORT).show();
                 });
                 requestQueue_1.add(jsonObjectRequest_1);
 
-                Toast.makeText(view2.getContext(), "Start date " + startDateSTR + "end date" + endDateSTR, Toast.LENGTH_LONG).show();
+                //Toast.makeText(view2.getContext(), "Start date " + startDateSTR + "end date" + endDateSTR, Toast.LENGTH_LONG).show();
                 startDateSTR = null;
                 endDateSTR = null;
-//                if(ApprovedSW.isChecked()){
-//                    constant_1 = new Constant();
-//                    requestQueue_1 = Volley.newRequestQueue(this);
-//
-//                    String url1 = constant_1.getURL() + constant_1.getPORT() + constant_1.getUPDATE_TOKEN() + "filter?isApproved=true";
-//                    object_1 = new JSONObject();
-//
-//                    jsonObjectRequest_1 = new JsonObjectRequest(Request.Method.GET, url1, object_1, response -> {
-//
-//                        try {
-//                            inquiryModelArrayList.clear();
-//                            response_object = response;
-//
-//                            JSONArray data_array = response.getJSONArray("data");
-//
-//                            inquiryCount.setText("Total inquiries - " + data_array.length());
-//                            for (int i = 0; i < data_array.length(); i++) {
-//                                //JSONObject product = product_array.getJSONObject(i);
-//                                JSONObject data = (JSONObject) data_array.get(i);
-//                                String inquiryNo = data.getString("tokenNumber");
-//                                String inquiryUser = data.getString("username");
-//                                String rawDay = data.getString("day");
-//                                //String inquiryDay = rawDay.substring(0,10);
-//                                String inquiryDay = rawDay;
-//
-//                                String[] mobileArray = {};//= {"Android","IPhone","WindowsMobile","Blackberry",-
-////                                "WebOS","Ubuntu","Windows7","Max OS X"};
-//                                ArrayList<String> productArray = new ArrayList<String>();
-//                                JSONArray product_array = data.getJSONArray("product");
-//                                Log.d("Product_array_dialog", String.valueOf(product_array));
-//                                for (int j = 0; j < product_array.length(); j++) {
-//                                    JSONObject product = product_array.getJSONObject(j);
-//                                    String product_id = product.getString("productId");
-//                                    String product_name = product.getString("productName");
-//                                    String qty = product.getString("quantity");
-//                                    String price = product.getString("price");
-//                                    String amount = String.valueOf(Integer.parseInt(qty) * Integer.parseInt(price));
-//                                    productArray.add(product_id + "  " + product_name + "   " + qty + "   " + price + "   " + amount);
-//                                    Log.d("MobileArray", product_id + "  " + product_name + "   " + qty + "   " + price + "   " + amount);
-//                                }
-//                                mobileArray = productArray.toArray(mobileArray);
-//                                Log.d("MobileArray", String.valueOf(mobileArray));
-//                                Boolean isInquired = data.getBoolean("isEnquired");
-//                                Boolean isPurchased = data.getBoolean("isPurchased");
-//                                String userRole = userSP.getString("userRole", "");
-//                                String billNo;
-//                                try {
-//                                    billNo = data.getString("billNo");
-//                                } catch (JSONException e) {
-//                                    billNo = "";
-//                                }
-//
-//                                boolean isManger;
-//                                if (userRole.equals("manager")) {
-//                                    isManger = true;
-//                                } else {
-//                                    isManger = false;
-//                                }
-//                                inquiryModelArrayList.add(new inquiryModel(inquiryNo, inquiryUser, inquiryDay, mobileArray, isInquired, isPurchased, isManger, billNo));
-//                                courseRV.setAdapter(new inquiryAdapter(Dashboard.this, inquiryModelArrayList));
-//
-//                            }
-//                        } catch (JSONException e) {
-//                            //Toast.makeText(this,"Something went wrong!",Toast.LENGTH_SHORT).show();
-//                        }
-//                    }, error -> {
-//                        Toast.makeText(this, "Something Went Wrong!" + error.toString(), Toast.LENGTH_SHORT).show();
-//                        //Log.d("Response Here", String.valueOf(error));
-//                    });
-//                    requestQueue_1.add(jsonObjectRequest_1);
-//
-//                    Toast.makeText(view2.getContext(), "Approved : "+ ApprovedSW.isChecked(), Toast.LENGTH_LONG).show();
-//
-//                }else {
-//                    if ((TextUtils.isEmpty(startDate.getText())) && (TextUtils.isEmpty(endDate.getText()))) {
-//                        Toast.makeText(view2.getContext(), "Complete the formality", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        // Onkar Write Code Here
-//                        constant_1 = new Constant();
-//                        requestQueue_1 = Volley.newRequestQueue(this);
-//
-//                        String url1 = constant_1.getURL() + constant_1.getPORT() + constant_1.getUPDATE_TOKEN() + "getByDate?from=" + startDateSTR + "&to=" + endDateSTR;
-//                        object_1 = new JSONObject();
-//
-//                        jsonObjectRequest_1 = new JsonObjectRequest(Request.Method.GET, url1, object_1, response -> {
-//
-//                            try {
-//                                inquiryModelArrayList.clear();
-//                                response_object = response;
-//                                JSONArray data_array = response.getJSONArray("data");
-//
-//                                inquiryCount.setText("Total inquiries - " + data_array.length());
-//                                for (int i = 0; i < data_array.length(); i++) {
-//                                    //JSONObject product = product_array.getJSONObject(i);
-//                                    JSONObject data = (JSONObject) data_array.get(i);
-//                                    String inquiryNo = data.getString("tokenNumber");
-//                                    String inquiryUser = data.getString("username");
-//                                    String rawDay = data.getString("day");
-//                                    //String inquiryDay = rawDay.substring(0,10);
-//                                    String inquiryDay = rawDay;
-//
-//                                    String[] mobileArray = {};//= {"Android","IPhone","WindowsMobile","Blackberry",-
-////                                "WebOS","Ubuntu","Windows7","Max OS X"};
-//                                    ArrayList<String> productArray = new ArrayList<String>();
-//                                    JSONArray product_array = data.getJSONArray("product");
-//                                    Log.d("Product_array_dialog", String.valueOf(product_array));
-//                                    for (int j = 0; j < product_array.length(); j++) {
-//                                        JSONObject product = product_array.getJSONObject(j);
-//                                        String product_id = product.getString("productId");
-//                                        String product_name = product.getString("productName");
-//                                        String qty = product.getString("quantity");
-//                                        String price = product.getString("price");
-//                                        String amount = String.valueOf(Integer.parseInt(qty) * Integer.parseInt(price));
-//                                        productArray.add(product_id + "  " + product_name + "   " + qty + "   " + price + "   " + amount);
-//                                        Log.d("MobileArray", product_id + "  " + product_name + "   " + qty + "   " + price + "   " + amount);
-//                                    }
-//                                    mobileArray = productArray.toArray(mobileArray);
-//                                    Log.d("MobileArray", String.valueOf(mobileArray));
-//                                    Boolean isInquired = data.getBoolean("isEnquired");
-//                                    Boolean isPurchased = data.getBoolean("isPurchased");
-//                                    String userRole = userSP.getString("userRole", "");
-//                                    String billNo;
-//                                    try {
-//                                        billNo = data.getString("billNo");
-//                                    } catch (JSONException e) {
-//                                        billNo = "";
-//                                    }
-//
-//                                    boolean isManger;
-//                                    if (userRole.equals("manager")) {
-//                                        isManger = true;
-//                                    } else {
-//                                        isManger = false;
-//                                    }
-//                                    inquiryModelArrayList.add(new inquiryModel(inquiryNo, inquiryUser, inquiryDay, mobileArray, isInquired, isPurchased, isManger, billNo));
-//                                    courseRV.setAdapter(new inquiryAdapter(Dashboard.this, inquiryModelArrayList));
-//
-//                                }
-//                            } catch (JSONException e) {
-//                                //Toast.makeText(this,"Something went wrong!",Toast.LENGTH_SHORT).show();
-//                            }
-//                        }, error -> {
-//                            Toast.makeText(this, "Something Went Wrong!" + error, Toast.LENGTH_SHORT).show();
-//                        });
-//                        requestQueue_1.add(jsonObjectRequest_1);
-//
-//                        Toast.makeText(view2.getContext(), "Start date " + startDateSTR + "end date" + endDateSTR, Toast.LENGTH_LONG).show();
-//                    }
-
-            });
-            //code for the negative button
-            builder.setNegativeButton("back", (dialog, which) -> dialog.dismiss());
-
-            //output line for the calling
-            final AlertDialog alertDialog = builder.create();
-            alertDialog.show();
-
-            //designing for buttons
-            //positive
-            Button button_positive = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-            //button_positive.setBackgroundColor(Color.GRAY);
-            button_positive.setPadding(20, 5, 20, 5);
-            button_positive.setTextColor(Color.BLACK);
-            //negative
-            Button button_negative = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-            //button_negative.setBackgroundColor(Color.GRAY);
-            button_negative.setPadding(20, 5, 20, 5);
-            button_negative.setTextColor(Color.BLACK);
-
-        });
-    }
-
-
-    @Override
-    public void onBackPressed() {
-
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            //super.onBackPressed();
-            if (pressedTime + 2000 > System.currentTimeMillis()) {
-                super.onBackPressed();
-                finish();
-                finishAffinity();
-            } else {
-                Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_SHORT).show();
             }
-            pressedTime = System.currentTimeMillis();
-        }
 
+//            jsonObjectRequest_1 = new JsonObjectRequest(Request.Method.GET, urlO, object_1, response -> {
+//
+//                try {
+//                    inquiryModelArrayList.clear();
+//                    response_object = response;
+//                    JSONArray data_array = response.getJSONArray("data");
+//
+//                    inquiryCount.setText("Total inquiries - " + data_array.length());
+//                    for (int i = 0; i < data_array.length(); i++) {
+//                        //JSONObject product = product_array.getJSONObject(i);
+//                        JSONObject data = (JSONObject) data_array.get(i);
+//                        String inquiryNo = data.getString("tokenNumber");
+//                        String inquiryUser = data.getString("username");
+//                        String rawDay = data.getString("day");
+//                        //String inquiryDay = rawDay.substring(0,10);
+//                        String inquiryDay = rawDay;
+//
+//                        String[] mobileArray = {};//= {"Android","IPhone","WindowsMobile","Blackberry",-
+////                                "WebOS","Ubuntu","Windows7","Max OS X"};
+//                        ArrayList<String> productArray = new ArrayList<String>();
+//                        JSONArray product_array = data.getJSONArray("product");
+//                        Log.d("Product_array_dialog", String.valueOf(product_array));
+//                        for (int j = 0; j < product_array.length(); j++) {
+//                            JSONObject product = product_array.getJSONObject(j);
+//                            String product_id = product.getString("productId");
+//                            String product_name = product.getString("productName");
+//                            String qty = product.getString("quantity");
+//                            String price = product.getString("price");
+//                            String amount = String.valueOf(Integer.parseInt(qty) * Integer.parseInt(price));
+//                            productArray.add(product_id + "  " + product_name + "   " + qty + "   " + price + "   " + amount);
+//                            Log.d("MobileArray", product_id + "  " + product_name + "   " + qty + "   " + price + "   " + amount);
+//                        }
+//                        mobileArray = productArray.toArray(mobileArray);
+//                        Log.d("MobileArray", String.valueOf(mobileArray));
+//                        Boolean isInquired = data.getBoolean("isEnquired");
+//                        Boolean isPurchased = data.getBoolean("isPurchased");
+//                        String userRole = userSP.getString("userRole", "");
+//                        String billNo;
+//                        try {
+//                            billNo = data.getString("billNo");
+//                        } catch (JSONException e) {
+//                            billNo = "";
+//                        }
+//
+//                        boolean isManger;
+//                        if (userRole.equals("manager")) {
+//                            isManger = true;
+//                        } else {
+//                            isManger = false;
+//                        }
+//                        inquiryModelArrayList.add(new inquiryModel(inquiryNo, inquiryUser, inquiryDay, mobileArray, isInquired, isPurchased, isManger, billNo));
+//                        courseRV.setAdapter(new inquiryAdapter(Dashboard.this, inquiryModelArrayList));
+//
+//                    }
+//                } catch (JSONException e) {
+//                    //Toast.makeText(this,"Something went wrong!",Toast.LENGTH_SHORT).show();
+//                }
+//            }, error -> {
+//                Toast.makeText(this, "Something Went Wrong!" + error, Toast.LENGTH_SHORT).show();
+//            });
+//            requestQueue_1.add(jsonObjectRequest_1);
+//
+//            Toast.makeText(view2.getContext(), "Start date " + startDateSTR + "end date" + endDateSTR, Toast.LENGTH_LONG).show();
+//            startDateSTR = null;
+//            endDateSTR = null;
+        });
+        //code for the negative button
+        builder.setNegativeButton("back", (dialog, which) -> dialog.dismiss());
+
+        //output line for the calling
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        //designing for buttons
+        //positive
+        Button button_positive = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        //button_positive.setBackgroundColor(Color.GRAY);
+        button_positive.setPadding(20, 5, 20, 5);
+        button_positive.setTextColor(Color.BLACK);
+        //negative
+        Button button_negative = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        //button_negative.setBackgroundColor(Color.GRAY);
+        button_negative.setPadding(20, 5, 20, 5);
+        button_negative.setTextColor(Color.BLACK);
     }
 
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.nav_token:
-                startActivity(new Intent(this, tokenHome.class));
-                return true;
-            case R.id.logout:
-                spLogin = getSharedPreferences("login", MODE_PRIVATE);
-                spLogin.edit().clear().apply();
-
-                spToken = getSharedPreferences("tokenSharedPreferences", MODE_PRIVATE);
-                spToken.edit().clear().apply();
-
-                spUserData = getSharedPreferences("userMetadata", MODE_PRIVATE);
-                spUserData.edit().clear().apply();
-
-                Toast.makeText(this, "Logged Out Successfully", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, MainActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 }
