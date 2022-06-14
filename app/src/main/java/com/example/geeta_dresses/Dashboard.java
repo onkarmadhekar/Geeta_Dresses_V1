@@ -44,8 +44,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -121,7 +123,11 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         // Using Constants
         constant = new Constant();
         // URL
-        String url = constant.getURL() + constant.getPORT() + constant.getUPDATE_TOKEN();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.yyyy");
+        String currentDateandTime = sdf.format(new Date());
+        String endDateSTRHere = "null";
+        String url = constant.getURL() + constant.getPORT() + constant.getUPDATE_TOKEN() + "filter?from=" + currentDateandTime + "&to=" + endDateSTRHere + "&isApproved=false";
+        //String url1 = constant_1.getURL() + constant_1.getPORT() + constant_1.getUPDATE_TOKEN() + "filter?from=" + currentDateandTime + "&to=" + endDateSTR + "&isApproved=false";
         //userSP.getString("tokenNumber","");
         // Setting up request queue
         requestQueue = Volley.newRequestQueue(this);
@@ -283,7 +289,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
     }
 
     public void filterCode(View view,String typeHere){
-        Toast.makeText(Dashboard.this, "Clicked filter!!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(Dashboard.this, "Clicked filter!!", Toast.LENGTH_SHORT).show();
         //defination for the dynamic dialog box
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
         View view2 = LayoutInflater.from(view.getContext()).inflate(R.layout.filter_card_dialog, null);
@@ -420,7 +426,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                         //Toast.makeText(this,"Something went wrong!",Toast.LENGTH_SHORT).show();
                     }
                 }, error -> {
-                    Toast.makeText(this, "Something Went Wrong! hjhj" + error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Filter is empty " , Toast.LENGTH_SHORT).show();
                 });
                 requestQueue_1.add(jsonObjectRequest_1);
 

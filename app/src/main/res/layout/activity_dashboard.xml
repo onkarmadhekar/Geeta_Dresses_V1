@@ -39,6 +39,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@drawable/ic_cloud_download"
+                    android:backgroundTint="@color/denim_blue"
                     android:layout_margin="10dp"
                     />
             </LinearLayout>

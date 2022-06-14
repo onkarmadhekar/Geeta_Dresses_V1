@@ -58,8 +58,8 @@ public class tokenDashboard extends AppCompatActivity {//implements AdapterView.
     SharedPreferences userSP;
     JSONObject response_object, object;
     InquiryModel inquiryModel;
+    String totalAmount;
     DatePickerDialog picker;
-    int totalAmount;
     String dataSTR, reasonSTR;
     String[] courses = {"Less Varieties", "High Prices",
             "Required Other Brand", "Bad Service",
@@ -107,23 +107,24 @@ public class tokenDashboard extends AppCompatActivity {//implements AdapterView.
 
 
         //Code for the intent from productFinder
-        String resultIN, product_nameIN, productIDIN, product_priceIN;
-        Bundle extras = getIntent().getExtras();
-        if (extras == null) {
-            resultIN = null;
-            product_nameIN = null;
-            productIDIN = null;
-            product_priceIN = null;
-        } else {
-            resultIN = extras.getString("result");
-            product_nameIN = extras.getString("product_name");
-            productIDIN = extras.getString("productId");
-            product_priceIN = extras.getString("productPrice");
-            Log.d("Data here Look", String.valueOf(extras));
-            productsModelArrayList.add(new productsModel(product_nameIN, "1", product_priceIN, productIDIN));
-            productsModelArrayList.add(new productsModel(product_nameIN, "1", product_priceIN, productIDIN));
-
-        }
+//        String resultIN, product_nameIN, productIDIN, product_priceIN;
+//        Bundle extras = getIntent().getExtras();
+//        if (extras == null) {
+//            resultIN = null;
+//            product_nameIN = null;
+//            productIDIN = null;
+//            product_priceIN = null;
+//        } else {
+//            resultIN = extras.getString("result");
+//            product_nameIN = extras.getString("product_name");
+//            productIDIN = extras.getString("productId");
+//            product_priceIN = extras.getString("productPrice");
+//            totalAmount = String.valueOf(1* Integer.parseInt(product_priceIN));
+//            Log.d("Data here Look", String.valueOf(extras));
+//            productsModelArrayList.add(new productsModel(product_nameIN, "1", product_priceIN, productIDIN));
+//
+//
+//        }
         // Using Constants
         constant = new Constant();
         // URL
@@ -157,7 +158,7 @@ public class tokenDashboard extends AppCompatActivity {//implements AdapterView.
                     String qty = product.getString("quantity");
                     String ActualPrice = product.getString("price");
                     String productId = product.getString("productId");
-                    totalAmount = Integer.parseInt(qty) * Integer.parseInt(ActualPrice);
+                    totalAmount = String.valueOf(Integer.parseInt(qty) * Integer.parseInt(ActualPrice));
                     productsModelArrayList.add(new productsModel(product_name, qty, ActualPrice, productId));
                     courseRV.setAdapter(new productAdapter(tokenDashboard.this, productsModelArrayList));
 
@@ -181,8 +182,6 @@ public class tokenDashboard extends AppCompatActivity {//implements AdapterView.
 //        // in below two lines we are setting layoutmanager and adapter to our recycler view.
 //        courseRV.setLayoutManager(linearLayoutManager);
 //        courseRV.setAdapter(productAdapter);
-
-        tvTotalAmount.setText(String.valueOf(totalAmount));
         //backBTN code
         backBTN.setOnClickListener(view -> {
             finish();
@@ -205,7 +204,7 @@ public class tokenDashboard extends AppCompatActivity {//implements AdapterView.
                 }
                 else{
                     Toast.makeText(v.getContext(),product_id.getText().toString() + "  " + product_name.getText().toString()+"  "+product_price.getText().toString(),Toast.LENGTH_LONG).show();
-                    totalAmount = Integer.parseInt(product_price.getText().toString()) * Integer.parseInt(product_price.getText().toString());
+                    totalAmount = String.valueOf(1 * Integer.parseInt(product_price.getText().toString()));
                     productsModelArrayList.add(new productsModel(product_id.getText().toString(), "1", product_price.getText().toString(), product_name.getText().toString()));
                     //productAdapter.notifyItemChanged(productsModelArrayList.size()-1);
                  //   productAdapter.notifyDataSetChanged();
@@ -292,6 +291,8 @@ public class tokenDashboard extends AppCompatActivity {//implements AdapterView.
 
         startActivity(intent);
     });
+        //Toast.makeText(this,"Complete the formality "+ totalAmount, Toast.LENGTH_SHORT).show();
+        tvTotalAmount.setText(String.valueOf(totalAmount));
         // in below two lines we are setting layoutmanager and adapter to our recycler view.
         courseRV.setLayoutManager(linearLayoutManager);
         courseRV.setAdapter(productAdapter);
