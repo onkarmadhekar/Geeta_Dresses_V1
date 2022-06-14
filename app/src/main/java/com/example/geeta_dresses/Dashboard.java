@@ -69,6 +69,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
     private long pressedTime;
     Boolean isAllFabsVisible;
     DatePickerDialog picker;
+    int totalMoney = 0;
     String startDateSTR, endDateSTR;
 
     // Arraylist for storing data
@@ -126,7 +127,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         SimpleDateFormat sdf = new SimpleDateFormat("MM.dd.yyyy");
         String currentDateandTime = sdf.format(new Date());
         String endDateSTRHere = "null";
-        String url = constant.getURL() + constant.getPORT() + constant.getUPDATE_TOKEN() + "filter?from=" + currentDateandTime + "&to=" + endDateSTRHere + "&isApproved=false";
+        String url = constant.getURL() + constant.getPORT() + constant.getUPDATE_TOKEN(); //+ "filter?from=" + currentDateandTime + "&to=" + endDateSTRHere + "&isApproved=false";
         //String url1 = constant_1.getURL() + constant_1.getPORT() + constant_1.getUPDATE_TOKEN() + "filter?from=" + currentDateandTime + "&to=" + endDateSTR + "&isApproved=false";
         //userSP.getString("tokenNumber","");
         // Setting up request queue
@@ -160,6 +161,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                         String qty = product.getString("quantity");
                         String price = product.getString("price");
                         String amount = String.valueOf(Integer.parseInt(qty) * Integer.parseInt(price));
+                        totalMoney = totalMoney + Integer.parseInt(amount);
                         productArray.add(product_id + "    " + product_name + "     " + qty + "     " + price + "     " + amount);
                         Log.d("MobileArray", product_id + "  " + product_name + "   " + qty + "   " + price + "   " + amount);
                     }
@@ -180,8 +182,9 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                     } else {
                         isManger = false;
                     }
-                    inquiryModelArrayList.add(new inquiryModel(inquiryNo, inquiryUser, inquiryDay, mobileArray, isInquired, isPurchased, isManger, billNo));
+                    inquiryModelArrayList.add(new inquiryModel(inquiryNo, inquiryUser, inquiryDay, mobileArray, isInquired, isPurchased, isManger, billNo , totalMoney));
                     courseRV.setAdapter(new inquiryAdapter(Dashboard.this, inquiryModelArrayList));
+                    totalMoney = 0;
 
                 }
             } catch (JSONException e) {
@@ -397,9 +400,11 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                                 String qty = product.getString("quantity");
                                 String price = product.getString("price");
                                 String amount = String.valueOf(Integer.parseInt(qty) * Integer.parseInt(price));
+                                totalMoney = totalMoney + Integer.parseInt(amount);
                                 productArray.add(product_id + "  " + product_name + "   " + qty + "   " + price + "   " + amount);
                                 Log.d("MobileArray", product_id + "  " + product_name + "   " + qty + "   " + price + "   " + amount);
                             }
+
                             mobileArray = productArray.toArray(mobileArray);
                             Log.d("MobileArray", String.valueOf(mobileArray));
                             Boolean isInquired = data.getBoolean("isEnquired");
@@ -418,9 +423,9 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                             } else {
                                 isManger = false;
                             }
-                            inquiryModelArrayList.add(new inquiryModel(inquiryNo, inquiryUser, inquiryDay, mobileArray, isInquired, isPurchased, isManger, billNo));
+                            inquiryModelArrayList.add(new inquiryModel(inquiryNo, inquiryUser, inquiryDay, mobileArray, isInquired, isPurchased, isManger, billNo , totalMoney));
                             courseRV.setAdapter(new inquiryAdapter(Dashboard.this, inquiryModelArrayList));
-
+                            totalMoney = 0;
                         }
                     } catch (JSONException e) {
                         //Toast.makeText(this,"Something went wrong!",Toast.LENGTH_SHORT).show();

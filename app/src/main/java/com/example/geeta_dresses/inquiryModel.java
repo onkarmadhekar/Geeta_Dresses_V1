@@ -9,10 +9,11 @@ public class inquiryModel {
     private Boolean isPurchased;
     private Boolean isManger;
     private String billNo;
+    private int totalMoney;
 
 
     //constructor
-    public inquiryModel(String inquiry_no,String inquiry_user, String inquiry_day, String[] product_list, Boolean isInquired,Boolean isPurchased ,Boolean isManger, String billNo){
+    public inquiryModel(String inquiry_no,String inquiry_user, String inquiry_day, String[] product_list, Boolean isInquired,Boolean isPurchased ,Boolean isManger, String billNo, int totalMoney){
         this.inquiry_no = inquiry_no;
         this.inquiry_user = inquiry_user;
         this.inquiry_day = inquiry_day;
@@ -21,6 +22,7 @@ public class inquiryModel {
         this.isPurchased = isPurchased;
         this.isManger = isManger;
         this.billNo = billNo;
+        this.totalMoney = totalMoney;
     }
 
     public String getInquiry_no() { return inquiry_no;    }
@@ -68,4 +70,8 @@ public class inquiryModel {
     public void setBillNo(String billNo) {
         this.billNo = billNo;
     }
+
+    public int getTotalMoney() { return totalMoney;    }
+
+    public void setTotalMoney(int totalMoney) {        this.totalMoney = totalMoney;    }
 }

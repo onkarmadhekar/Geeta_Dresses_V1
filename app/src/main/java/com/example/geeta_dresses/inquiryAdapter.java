@@ -45,7 +45,6 @@ public class inquiryAdapter extends RecyclerView.Adapter<inquiryAdapter.Viewfind
 
     ArrayList<inquiryModel> inquiryModelArrayList;
 
-
     // Constructor
     public inquiryAdapter(Context context, ArrayList<inquiryModel> inquiryModelArrayList) {
         this.context = context;
@@ -113,6 +112,9 @@ public class inquiryAdapter extends RecyclerView.Adapter<inquiryAdapter.Viewfind
                 isPurchased.setChecked(inquiryModelArrayList.get(getAdapterPosition()).getPurchased());
                 EditText billNoDialog = view.findViewById(R.id.billNoDialog);
                 String billNoSTR = inquiryModelArrayList.get(getAdapterPosition()).getBillNo();
+                TextView totalAmount = view.findViewById(R.id.subTotalDialog);
+                String subTotal = String.valueOf(inquiryModelArrayList.get(getAdapterPosition()).getTotalMoney());
+                totalAmount.setText(subTotal);
                 if(!(billNoSTR.length() == 0)){
                     billNoDialog.setText(billNoSTR);
                 }
